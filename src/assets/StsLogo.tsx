@@ -1,5 +1,5 @@
-const SvgComponent = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={260} height={90}>
+const StsLogo = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width={200} height={90}>
     <path fill="#00A0D4" d="M27 27h16v36H27z" />
     <path stroke="#111B41" strokeWidth={4} d="M20 20h30M20 70h30" />
     <text
@@ -24,4 +24,4 @@ const SvgComponent = () => (
     </text>
   </svg>
 )
-export default SvgComponent
+export default StsLogo

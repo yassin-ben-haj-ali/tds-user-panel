@@ -3,6 +3,7 @@ import LoginPage from "./LoginPage/LoginPage";
 import LoginLayout from "./LoginPage/LoginLayout/LoginLayout";
 import NotFound from "./components/ui/NotFound";
 import Layout from "./Layout";
+import UsersPage from "./UsersPage/UsersPage";
 
 const AppRoutes = () => {
   return (
@@ -17,7 +18,7 @@ const AppRoutes = () => {
       ></Route>
       <Route path="/" element={<Layout />}>
         <Route index element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<div>users page</div>} />
+        <Route path="/home" element={<UsersPage />} />
         <Route path="/commands" element={<div>commands page</div>} />
         <Route path="/fabricants" element={<div>fabriquants page</div>} />
         <Route path="/orders" element={<div>orders page</div>} />

@@ -4,6 +4,7 @@ import LoginLayout from "./LoginPage/LoginLayout/LoginLayout";
 import NotFound from "./components/ui/NotFound";
 import Layout from "./Layout";
 import UsersPage from "./UsersPage/UsersPage";
+import MyArticlesPage from "./myArticles/myArticlesPage";
 
 const AppRoutes = () => {
   return (
@@ -19,7 +20,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Layout />}>
         <Route index element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<UsersPage />} />
-        <Route path="/commands" element={<div>commands page</div>} />
+        <Route path="/commands" element={<MyArticlesPage />} />
         <Route path="/fabricants" element={<div>fabriquants page</div>} />
         <Route path="/orders" element={<div>orders page</div>} />
       </Route>

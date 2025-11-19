@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import type { TableFilter, TableFilters } from "./types";
-import { UsersContext } from "./UserContext";
+import { initialState, UsersContext } from "./UserContext";
 
 export const useUsersContext = () => {
   const ctx = useContext(UsersContext);
@@ -16,9 +16,16 @@ export const useUsersContext = () => {
         [table]: filters,
       },
     }));
+  const resetState = () =>
+    setState((prev) => ({
+      ...prev,
+      ...initialState,
+    }));
+
   return {
     ...users,
     setTableFilters,
+    resetState,
     setState,
   };
 };

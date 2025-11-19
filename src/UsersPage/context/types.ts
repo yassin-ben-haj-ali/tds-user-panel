@@ -14,3 +14,12 @@ export type UsersContextStateType = {
   tableFilters: TableFilters;
 };
 
+export type User = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  mailAdress: string;
+  civility: string;
+  role: string;
+  telephoneNumber: string;
+};

@@ -1,5 +1,6 @@
 import { CustomInput } from "@/components/ui/CustomInput";
 import { SearchIcon } from "@/assets/SearchIcon";
+import AddUser from "./AddUser/AddUser";
 
 type Props = {
   children: React.ReactNode;
@@ -16,7 +17,7 @@ const UsersPageLayout = (props: Props) => {
         </p>
       </div>
       <div className="mb-5 flex w-full items-center justify-end gap-x-4">
-        <div className="b relative w-full max-w-xs">
+        <div className="relative w-full max-w-xs">
           <div className="-translate-y-35 pointer-events-none absolute left-6 top-4 z-10 flex -translate-x-1/2 transform items-center">
             <SearchIcon />
           </div>
@@ -27,6 +28,7 @@ const UsersPageLayout = (props: Props) => {
             placeholder={"Rechercher"}
           />
         </div>
+        <AddUser />
       </div>
       <div className="h-full" style={{ minHeight: "260px" }}>
         {props.children}

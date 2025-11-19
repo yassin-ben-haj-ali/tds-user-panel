@@ -1,11 +1,36 @@
 import CustomTable from "@/components/ui/CustomTable";
 import { TableCell, TableRow } from "@/components/ui/table";
 import Loader from "@/components/ui/Loader/Loader";
+import ViewUserInfo from "../ViewUser/ViewUser";
+import ViewIcon from "@/assets/ViewIcon";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import AddUser from "../AddUser/AddUser";
+import ConfirmModal from "@/layouts/ConfirmModal";
 
 const headers = [
   {
+    optionName: "see",
+    headerTitle: "Aperçus",
+    filterParams: {
+      hideOrder: true,
+      hideSearch: true,
+    },
+  },
+  {
     optionName: "name",
     headerTitle: "Nom et Prénom",
+  },
+  {
+    optionName: "civility",
+    headerTitle: "Civilité",
+    filterParams: {
+      hideOrder: true,
+    },
   },
   {
     optionName: "email",
@@ -33,24 +58,33 @@ const headers = [
 
 const users = [
   {
+    id: "1",
     firstName: "gestionnaire1",
     lastName: "ben younes",
-    email: "test@yopmail.com",
-    role: "gestionnaire",
+    civility: "Mr",
+    mailAdress: "test@yopmail.com",
+    role: "Gestionnaire",
+    telephoneNumber: "+216 50889124",
     createdAt: "2023-10-01",
   },
   {
+    id: "2",
     firstName: "foulen",
     lastName: "ben foulen",
-    email: "foulen@yopmail.com",
+    civility: "Mr",
+    mailAdress: "foulen@yopmail.com",
     role: "Technicien",
+    telephoneNumber: "+216 50889126",
     createdAt: "2023-09-15",
   },
   {
+    id: "3",
     firstName: "admin",
     lastName: "super",
-    email: "admin@yopmail.com",
+    civility: "Mr",
+    mailAdress: "admin@yopmail.com",
     role: "Administrateur",
+    telephoneNumber: "+216 50889123",
     createdAt: "2023-08-20",
   },
 ];
@@ -59,11 +93,52 @@ const UsersTable = () => {
   const usersRows = users.map((user, index) => (
     <TableRow key={index}>
       <TableCell className="text-center font-medium">
+        <ViewUserInfo
+          id={user?.id}
+          showingComponent={<ViewIcon />}
+          userData={{ data: user, isLoading: false }}
+        />
+      </TableCell>
+      <TableCell className="text-center font-medium">
         {user.firstName} {user.lastName}
       </TableCell>
-      <TableCell className="text-center">{user.email}</TableCell>
+      <TableCell className="text-center">
+        {user.civility === "Mr" ? "Monsieur" : "Madame"}
+      </TableCell>
+      <TableCell className="text-center">{user.mailAdress}</TableCell>
       <TableCell className="text-center">{user.role}</TableCell>
       <TableCell className="text-center">{user.createdAt}</TableCell>
+      <TableCell className="text-center">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button tabIndex={0}>
+                <AddUser editMode user={user} />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Modifier</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger type="button">
+              <ConfirmModal
+                name="user"
+                type="delete"
+                title={"Êtes-vous sûr de vouloir supprimer l'utilisateur"}
+                description={""}
+                handleConfirm={(e) => {
+                  e.stopPropagation();
+                }}
+                isLoading={false}
+              />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>supprimer</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </TableCell>
     </TableRow>
   ));
 

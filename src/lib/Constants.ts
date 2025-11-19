@@ -6,5 +6,9 @@ export const FILTER_OPTIONS: OptionConfig = {
       { id: 0, name: "Technicien", value: "Technicien" },
       { id: 1, name: "Gestionnaire", value: "Gestionnaire" },
     ],
+    civility: [
+      { id: 0, name: "Monsieur", value: "Mr" },
+      { id: 1, name: "Madame", value: "Mme" },
+    ],
   },
 };

@@ -3,11 +3,14 @@ import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { UsersProvider } from "./UsersPage/context/UserContext.tsx";
+import { HeroUIProvider } from "@heroui/react";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <UsersProvider>
-      <App />
-    </UsersProvider>
+    <HeroUIProvider>
+      <UsersProvider>
+        <App />
+      </UsersProvider>
+    </HeroUIProvider>
   </BrowserRouter>
 );

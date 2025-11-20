@@ -5,6 +5,7 @@ import NotFound from "./components/ui/NotFound";
 import Layout from "./Layout";
 import UsersPage from "./UsersPage/UsersPage";
 import MyArticlesPage from "./myArticles/myArticlesPage";
+import ManufacturersPage from "./ManufacturersPage/ManufacturersPage";
 
 const AppRoutes = () => {
   return (
@@ -21,7 +22,7 @@ const AppRoutes = () => {
         <Route index element={<Navigate to="/home" replace />} />
         <Route path="/home" element={<UsersPage />} />
         <Route path="/commands" element={<MyArticlesPage />} />
-        <Route path="/fabricants" element={<div>fabriquants page</div>} />
+        <Route path="/fabricants" element={<ManufacturersPage />} />
         <Route path="/orders" element={<div>orders page</div>} />
       </Route>
       <Route path="*" element={<NotFound />} />

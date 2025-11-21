@@ -56,7 +56,7 @@ const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
             <EditIcon />
           </button>
         ) : (
-          <Button type="button">Créer un article</Button>
+          <Button type="button" className="h-10">Créer un article</Button>
         )}
       </DialogTrigger>
       <DialogContent

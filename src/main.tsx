@@ -4,12 +4,15 @@ import App from "./App.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { UsersProvider } from "./UsersPage/context/UserContext.tsx";
 import { HeroUIProvider } from "@heroui/react";
+import { ArticlesProvider } from "./myArticles/context/ArticleContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
     <HeroUIProvider>
       <UsersProvider>
-        <App />
+        <ArticlesProvider>
+          <App />
+        </ArticlesProvider>
       </UsersProvider>
     </HeroUIProvider>
   </BrowserRouter>

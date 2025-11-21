@@ -4,7 +4,15 @@ import MyArticlesList from "./myArticlesList";
 import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 
 const MyArticlesPage = () => {
-  const myArticles = [];
+  const myArticles = [
+    {
+      id: "1",
+      numero: "commande-1",
+      date_export: "12-05-2025",
+      status: "En stock",
+      received_qty: 150,
+    },
+  ];
   const { resetState } = useUsersContext();
 
   useEffect(() => {

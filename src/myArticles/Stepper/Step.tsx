@@ -23,7 +23,6 @@ const Step = (props: Props) => {
   }, [
     searchParams,
     setSearchParams,
-    setFormStep,
     props.stepNumber,
     props.stepStatus,
   ]);

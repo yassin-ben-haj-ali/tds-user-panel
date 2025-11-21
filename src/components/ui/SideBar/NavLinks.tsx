@@ -28,7 +28,7 @@ const NavLinks = () => {
       icon: (
         <FabriquantIcon active={location.pathname.includes("/fabricants")} />
       ),
-      label: "Fabricants",
+      label: "Fabriquants",
       disabled: false,
       isActive: location.pathname === "/fabricants",
     },

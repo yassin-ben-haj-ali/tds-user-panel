@@ -5,7 +5,6 @@ import type {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
-import CustomSelect from "@/components/ui/CustomSelect";
 import { PhoneInput } from "@/components/ui/PhoneInput";
 import type { FormValues } from "./AddManufacturerType";
 
@@ -15,32 +14,18 @@ type Props = {
   setValue: UseFormSetValue<FormValues>;
   watch: UseFormWatch<FormValues>;
 };
-const civilityOptions = [
-  { label: "Monsieur", value: "Mr" },
-  { label: "Madame", value: "Mme" },
-];
-
 
 const ManufacturerForm = ({ register, errors, setValue, watch }: Props) => {
   return (
     <>
       <div className="space-y-3">
-        <div className="flex items-center gap-3">
-          <CustomInput
-            required
-            label="Nom"
-            placeholder="Nom"
-            error={errors?.lastName?.message}
-            {...register(`lastName`)}
-          />
-          <CustomInput
-            required
-            label="Prénom"
-            placeholder="Prénom"
-            error={errors?.firstName?.message}
-            {...register(`firstName`)}
-          />
-        </div>
+        <CustomInput
+          required
+          label="Nom"
+          placeholder="Nom"
+          error={errors?.name?.message}
+          {...register(`name`)}
+        />
         <CustomInput
           required
           error={errors?.mailAdress?.message}
@@ -49,14 +34,12 @@ const ManufacturerForm = ({ register, errors, setValue, watch }: Props) => {
           {...register(`mailAdress`)}
           placeholder="Email"
         />
-        <CustomSelect
-          options={civilityOptions}
+        <CustomInput
           required
-          label="Civilité"
-          placeholder="Civilité"
-          value={watch(`civility`)}
-          setValue={(civility) => setValue(`civility`, civility)}
-          error={errors?.civility?.message}
+          label="adress"
+          placeholder="adresse"
+          error={errors?.adress?.message}
+          {...register(`adress`)}
         />
         <div className="z-50 w-full">
           <PhoneInput

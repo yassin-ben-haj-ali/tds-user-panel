@@ -15,14 +15,17 @@ import Loader from "@/components/ui/Loader/Loader";
 import UserForm from "./ManufacturerForm";
 import { addManufacturerSchema, type FormValues } from "./AddManufacturerType";
 import EditIcon from "@/assets/EditIcon";
-import type { User } from "@/UsersPage/context/types";
+import type { Manufacturer } from "../ViewManufacturer/ViewManufacturer";
 
 type AddManufacturerProps = {
   editMode?: boolean;
-  user?: Omit<User, "role">;
+  manufacturer?: Manufacturer;
 };
 
-const AddManufacturer: React.FC<AddManufacturerProps> = ({ editMode, user }) => {
+const AddManufacturer: React.FC<AddManufacturerProps> = ({
+  editMode,
+  manufacturer,
+}) => {
   const isLoading = false;
   const [open, setOpen] = useState(false);
   const form = useForm<FormValues>({
@@ -36,8 +39,8 @@ const AddManufacturer: React.FC<AddManufacturerProps> = ({ editMode, user }) => 
   };
   useEffect(() => {
     if (open) {
-      if (editMode && user) {
-        reset(user);
+      if (editMode && manufacturer) {
+        reset(manufacturer);
       } else {
         reset();
       }

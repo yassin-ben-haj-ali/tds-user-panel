@@ -1,7 +1,6 @@
 import CustomTable from "@/components/ui/CustomTable";
 import { TableCell, TableRow } from "@/components/ui/table";
 import Loader from "@/components/ui/Loader/Loader";
-import ViewUserInfo from "../ViewManufacturer/ViewManufacturer";
 import ViewIcon from "@/assets/ViewIcon";
 import {
   Tooltip,
@@ -11,6 +10,7 @@ import {
 } from "@/components/ui/tooltip";
 import AddManufacturer from "../AddManufacturer/AddManufacturer";
 import ConfirmModal from "@/layouts/ConfirmModal";
+import ViewManufacturerInfo from "../ViewManufacturer/ViewManufacturer";
 
 const headers = [
   {
@@ -23,14 +23,7 @@ const headers = [
   },
   {
     optionName: "name",
-    headerTitle: "Nom et Prénom",
-  },
-  {
-    optionName: "civility",
-    headerTitle: "Civilité",
-    filterParams: {
-      hideOrder: true,
-    },
+    headerTitle: "Nom",
   },
   {
     optionName: "email",
@@ -41,10 +34,11 @@ const headers = [
     },
   },
   {
-    optionName: "role",
-    headerTitle: "Rôle",
+    optionName: "adress",
+    headerTitle: "adress",
     filterParams: {
       hideOrder: true,
+      hideSearch: true,
     },
   },
   {
@@ -56,64 +50,49 @@ const headers = [
   },
 ];
 
-const users = [
+const manufacturers = [
   {
     id: "1",
-    firstName: "gestionnaire1",
-    lastName: "ben younes",
-    civility: "Mr",
-    mailAdress: "test@yopmail.com",
-    role: "Gestionnaire",
+    name: "usine1",
+    mailAdress: "usine1@yopmail.com",
+    adress: "rue taha hassine - 4013",
     telephoneNumber: "+216 50889124",
-    createdAt: "2023-10-01",
+    createdAt: "2025-10-01",
   },
   {
     id: "2",
-    firstName: "foulen",
-    lastName: "ben foulen",
-    civility: "Mr",
-    mailAdress: "foulen@yopmail.com",
-    role: "Technicien",
+    name: "usine2",
+    mailAdress: "usine2@yopmail.com",
+    adress: "rue d'independance - 4030",
     telephoneNumber: "+216 50889126",
-    createdAt: "2023-09-15",
-  },
-  {
-    id: "3",
-    firstName: "admin",
-    lastName: "super",
-    civility: "Mr",
-    mailAdress: "admin@yopmail.com",
-    role: "Administrateur",
-    telephoneNumber: "+216 50889123",
-    createdAt: "2023-08-20",
+    createdAt: "2025-09-15",
   },
 ];
 
 const ManufacturersTable = () => {
-  const usersRows = users.map((user, index) => (
+  const manufacturersRows = manufacturers.map((manufacturer, index) => (
     <TableRow key={index}>
       <TableCell className="text-center font-medium">
-        <ViewUserInfo
-          id={user?.id}
+        <ViewManufacturerInfo
+          id={manufacturer?.id}
           showingComponent={<ViewIcon />}
-          manufacturerData={{ data: user, isLoading: false }}
+          manufacturerData={{ data: manufacturer, isLoading: false }}
         />
       </TableCell>
       <TableCell className="text-center font-medium">
-        {user.firstName} {user.lastName}
+        {manufacturer.name}
       </TableCell>
-      <TableCell className="text-center">
-        {user.civility === "Mr" ? "Monsieur" : "Madame"}
+      <TableCell className="text-center">{manufacturer.mailAdress}</TableCell>
+      <TableCell className="text-center font-medium">
+        {manufacturer.adress}
       </TableCell>
-      <TableCell className="text-center">{user.mailAdress}</TableCell>
-      <TableCell className="text-center">{user.role}</TableCell>
-      <TableCell className="text-center">{user.createdAt}</TableCell>
+      <TableCell className="text-center">{manufacturer.createdAt}</TableCell>
       <TableCell className="text-center">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <button tabIndex={0}>
-                <AddManufacturer editMode user={user} />
+                <AddManufacturer editMode manufacturer={manufacturer} />
               </button>
             </TooltipTrigger>
             <TooltipContent>
@@ -159,7 +138,7 @@ const ManufacturersTable = () => {
               </TableRow>
             ) : (
               <>
-                {usersRows}
+                {manufacturersRows}
                 <TableRow>
                   <TableCell colSpan={headers.length + 1} className="h-full">
                     {isFetchingNextPage && (

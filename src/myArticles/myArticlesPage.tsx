@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { EmptyPage } from "./emptyPage";
+import EmptyPage from "./emptyPage";
 import MyArticlesList from "./myArticlesList";
 import { useUsersContext } from "@/UsersPage/context/useUsersContext";
+import AddArticle from "./AddArticle/AddArticle";
 
 const MyArticlesPage = () => {
   const myArticles = [
@@ -21,7 +22,11 @@ const MyArticlesPage = () => {
 
   return (
     <div className="relative h-full w-full bg-white p-2">
-      {myArticles.length > 0 ? <MyArticlesList /> : <EmptyPage />}
+      {myArticles.length > 0 ? (
+        <MyArticlesList />
+      ) : (
+        <EmptyPage component={<AddArticle />} name="article" />
+      )}
     </div>
   );
 };

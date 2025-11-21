@@ -6,6 +6,7 @@ import Layout from "./Layout";
 import UsersPage from "./UsersPage/UsersPage";
 import MyArticlesPage from "./myArticles/myArticlesPage";
 import ManufacturersPage from "./ManufacturersPage/ManufacturersPage";
+import OrdersPage from "./OrdersPage/OrdersPage";
 
 const AppRoutes = () => {
   return (
@@ -23,7 +24,7 @@ const AppRoutes = () => {
         <Route path="/home" element={<UsersPage />} />
         <Route path="/commands" element={<MyArticlesPage />} />
         <Route path="/fabricants" element={<ManufacturersPage />} />
-        <Route path="/orders" element={<div>orders page</div>} />
+        <Route path="/orders" element={<OrdersPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -1,10 +1,11 @@
 import type { Article } from "../context/types";
 import { useRef } from "react";
 import Loader from "@/components/ui/Loader/Loader";
-import { EmptyPage } from "../emptyPage";
+import EmptyPage from "../emptyPage";
 import NoResults from "@/components/ui/NoResults";
 import { useArticlesContext } from "../context/useArticleContext";
 import ArticleCard from "./ArticleCard";
+import AddArticle from "../AddArticle/AddArticle";
 
 type Status = {
   status: string;
@@ -42,7 +43,7 @@ const MyArticles = () => {
   }
 
   if (error) {
-    return <EmptyPage />;
+    return <EmptyPage name="article" component={<AddArticle />} />;
   }
   return ListArticles.length ? (
     <div

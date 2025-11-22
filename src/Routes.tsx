@@ -7,6 +7,7 @@ import UsersPage from "./UsersPage/UsersPage";
 import MyArticlesPage from "./myArticles/myArticlesPage";
 import ManufacturersPage from "./ManufacturersPage/ManufacturersPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
+import OrderDetailsPage from "./OrderDetailsPage/OrderDetailsPage";
 
 const AppRoutes = () => {
   return (
@@ -25,7 +26,7 @@ const AppRoutes = () => {
         <Route path="/commands" element={<MyArticlesPage />} />
         <Route path="/fabricants" element={<ManufacturersPage />} />
         <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/orders/:id" element={<h1>order numéro</h1>} />
+        <Route path="/orders/:id" element={<OrderDetailsPage />} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

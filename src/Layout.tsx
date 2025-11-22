@@ -46,7 +46,7 @@ const Layout = () => {
           </button>
         </header>
 
-        <main className="grow overflow-x-hidden p-4">
+        <main className="grow overflow-hidden p-4">
           <Outlet />
         </main>
 

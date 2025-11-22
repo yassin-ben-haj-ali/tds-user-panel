@@ -8,7 +8,7 @@ type Props = {
 
 const ManufacturerDetails = ({ manufacturer }: Props) => {
   return (
-    <>
+    <div className="space-y-3">
       <CustomInput label="Nom" value={manufacturer?.name} disabled />
       <CustomInput
         label="Email"
@@ -25,7 +25,7 @@ const ManufacturerDetails = ({ manufacturer }: Props) => {
         defaultCountry="FR"
         disabled={true}
       />
-    </>
+    </div>
   );
 };
 

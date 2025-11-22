@@ -15,7 +15,7 @@ type Props = {
   watch: UseFormWatch<FormValues>;
 };
 
-const UserForm = ({ register, errors, setValue }: Props) => {
+const ArticleForm = ({ register, errors, setValue }: Props) => {
   return (
     <>
       <div className="space-y-3">
@@ -68,4 +68,4 @@ const UserForm = ({ register, errors, setValue }: Props) => {
   );
 };
 
-export default UserForm;
+export default ArticleForm;

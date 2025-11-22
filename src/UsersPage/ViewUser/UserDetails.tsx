@@ -17,10 +17,10 @@ const roles = [
 ];
 const UserDetails = ({ user }: Props) => {
   return (
-    <>
+    <div className="space-y-3">
       <div className="flex items-center gap-3 space-y-4">
         <CustomInput label="Nom" value={user?.lastName} disabled />
-        <CustomInput label="Prénom" value={user?.firstName} disabled />
+        <CustomInput value={user?.firstName} disabled />
       </div>
       <CustomSelect options={roles} value={user?.role} label="Rôle" disabled />
       <CustomInput
@@ -50,7 +50,7 @@ const UserDetails = ({ user }: Props) => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

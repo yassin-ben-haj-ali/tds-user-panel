@@ -25,6 +25,7 @@ const AppRoutes = () => {
         <Route path="/commands" element={<MyArticlesPage />} />
         <Route path="/fabricants" element={<ManufacturersPage />} />
         <Route path="/orders" element={<OrdersPage />} />
+        <Route path="/orders/:id" element={<h1>order numéro</h1>} />
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

@@ -123,7 +123,6 @@ const UsersTable = () => {
           <Tooltip>
             <TooltipTrigger type="button">
               <ConfirmModal
-                name="user"
                 type="delete"
                 title={"Êtes-vous sûr de vouloir supprimer l'utilisateur"}
                 description={""}

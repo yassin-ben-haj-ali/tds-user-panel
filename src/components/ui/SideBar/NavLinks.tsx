@@ -14,14 +14,14 @@ const NavLinks = () => {
       icon: <UserIcon active={location.pathname.includes("/home")} />,
       label: "Utilisateurs",
       disabled: false,
-      isActive: location.pathname === "/home",
+      isActive: location.pathname.includes("/home"),
     },
     {
       to: "/commands",
       icon: <CommandIcon active={location.pathname.includes("/commands")} />,
       label: "Commandes",
       disabled: false,
-      isActive: location.pathname === "/commands",
+      isActive: location.pathname.includes("/commands"),
     },
     {
       to: "/fabricants",
@@ -30,14 +30,14 @@ const NavLinks = () => {
       ),
       label: "Fabriquants",
       disabled: false,
-      isActive: location.pathname === "/fabricants",
+      isActive: location.pathname.includes("/fabricants"),
     },
     {
       to: "/orders",
       icon: <OrderIcon active={location.pathname.includes("/orders")} />,
       label: "Ordrers de fabrication",
       disabled: false,
-      isActive: location.pathname === "/orders",
+      isActive: location.pathname.includes("/orders"),
     },
   ];
 

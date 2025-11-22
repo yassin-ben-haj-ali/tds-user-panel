@@ -12,6 +12,8 @@ import ConfirmModal from "@/layouts/ConfirmModal";
 import type { User } from "@/UsersPage/context/types";
 import type { Manufacturer } from "@/ManufacturersPage/ViewManufacturer/ViewManufacturer";
 import type { Article } from "@/myArticles/context/types";
+import ViewIcon from "@/assets/ViewIcon";
+import { useNavigate } from "react-router-dom";
 
 export type Order = {
   id: string;
@@ -26,6 +28,7 @@ type OrderCardProps = {
 };
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
+  const navigate = useNavigate();
   const formatDate = (inputDate?: string): string => {
     if (!inputDate) return "25 juin 2023";
     const formattedDate = format(new Date(inputDate), "dd MMMM yyyy", {
@@ -40,9 +43,15 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
         <CardTitle className="text-lg capitalize">
           {order.article.numero}
         </CardTitle>
-        <div>
+        <div className="flex gap-3 items-center justify-center">
+          <button
+            type="button"
+            className="rounded-md border border-primary p-1 h-10 w-10 flex items-center justify-center cursor-pointer"
+            onClick={() => navigate(`/orders/${order.id}`)}
+          >
+            <ViewIcon />
+          </button>
           <ConfirmModal
-            name="ordre"
             type="delete"
             title="Supprimer ordre de fabrication"
             description="êtes vous sûr de vouloir supprimer l'ordre de fabrication!"
@@ -50,7 +59,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
               e.stopPropagation();
             }}
             isLoading={false}
-            buttonClassName="flex h-10 w-10 items-center justify-center border border-[#4D2EB2] p-1"
+            buttonClassName="h-10 w-10 flex items-center justify-center border-primary"
           />
         </div>
       </CardHeader>

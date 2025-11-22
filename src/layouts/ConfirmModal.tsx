@@ -15,7 +15,6 @@ import Loader from "@/components/ui/Loader/Loader";
 import TrashImage from "@/assets/TrashImage";
 
 type Props = {
-  name: string;
   type: "delete";
   title: string;
   description: string;
@@ -44,33 +43,31 @@ const ConfirmModal = (props: Props) => {
         key={props.description}
       >
         <DialogTrigger asChild type="button">
-          {props.name !== "User Modal" && props.name !== "Company Modal" && (
-            <button
-              type="button"
-              className={`rounded-md border p-1 ${
-                props?.buttonClassName ?? null
-              } ${
-                props?.disabledConfirmModal
-                  ? "cursor-not-allowed opacity-50"
-                  : "cursor-pointer"
-              }`}
-              disabled={props?.disabledConfirmModal}
-              onClick={(e) => {
-                e.stopPropagation();
-                if (props?.onClick) {
-                  props.onClick(e);
-                }
-              }}
-            >
-              {props.type === "delete" ? (
-                <DeleteIcon color={props.iconColor} />
-              ) : (
-                <Button type="button" className="relative px-8 py-4 text-lg">
-                  {props.buttonTitle}
-                </Button>
-              )}
-            </button>
-          )}
+          <button
+            type="button"
+            className={`rounded-md border p-1 ${
+              props?.buttonClassName ?? null
+            } ${
+              props?.disabledConfirmModal
+                ? "cursor-not-allowed opacity-50"
+                : "cursor-pointer"
+            }`}
+            disabled={props?.disabledConfirmModal}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (props?.onClick) {
+                props.onClick(e);
+              }
+            }}
+          >
+            {props.type === "delete" ? (
+              <DeleteIcon color={props.iconColor} />
+            ) : (
+              <Button type="button" className="relative px-8 py-4 text-lg">
+                {props.buttonTitle}
+              </Button>
+            )}
+          </button>
         </DialogTrigger>
         <DialogContent className="flex max-w-[300px] flex-wrap justify-center py-8 sm:max-w-[335px] lg:max-h-[650px] lg:max-w-[450px]">
           <DialogHeader>

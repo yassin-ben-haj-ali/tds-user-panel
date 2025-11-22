@@ -33,7 +33,6 @@ const Orders = () => {
         id: "3",
         firstName: "admin",
         lastName: "super",
-        civility: "Mr",
         mailAdress: "admin@yopmail.com",
         role: "Administrateur",
         telephoneNumber: "+216 50889123",

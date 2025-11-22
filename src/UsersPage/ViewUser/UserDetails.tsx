@@ -6,10 +6,6 @@ import type { User } from "../context/types";
 type Props = {
   user: User | undefined;
 };
-const civilityOptions = [
-  { label: "Monsieur", value: "Mr" },
-  { label: "Madame", value: "Mme" },
-];
 const roles = [
   { label: "Gestionnaire", value: "Gestionnaire" },
   { label: "Technicien", value: "Technicien" },
@@ -28,14 +24,6 @@ const UserDetails = ({ user }: Props) => {
         placeholder="Email"
         required
         value={user?.mailAdress}
-        disabled={true}
-      />
-      <CustomSelect
-        label="Civilité"
-        placeholder="Civilité"
-        required={true}
-        options={civilityOptions}
-        value={user?.civility}
         disabled={true}
       />
 

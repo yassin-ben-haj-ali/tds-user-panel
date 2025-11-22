@@ -26,13 +26,6 @@ const headers = [
     headerTitle: "Nom et Prénom",
   },
   {
-    optionName: "civility",
-    headerTitle: "Civilité",
-    filterParams: {
-      hideOrder: true,
-    },
-  },
-  {
     optionName: "email",
     headerTitle: "email",
     filterParams: {
@@ -61,7 +54,6 @@ const users = [
     id: "1",
     firstName: "gestionnaire1",
     lastName: "ben younes",
-    civility: "Mr",
     mailAdress: "test@yopmail.com",
     role: "Gestionnaire",
     telephoneNumber: "+216 50889124",
@@ -71,7 +63,6 @@ const users = [
     id: "2",
     firstName: "foulen",
     lastName: "ben foulen",
-    civility: "Mr",
     mailAdress: "foulen@yopmail.com",
     role: "Technicien",
     telephoneNumber: "+216 50889126",
@@ -81,7 +72,6 @@ const users = [
     id: "3",
     firstName: "admin",
     lastName: "super",
-    civility: "Mr",
     mailAdress: "admin@yopmail.com",
     role: "Administrateur",
     telephoneNumber: "+216 50889123",
@@ -102,13 +92,10 @@ const UsersTable = () => {
       <TableCell className="text-center font-medium">
         {user.firstName} {user.lastName}
       </TableCell>
-      <TableCell className="text-center">
-        {user.civility === "Mr" ? "Monsieur" : "Madame"}
-      </TableCell>
       <TableCell className="text-center">{user.mailAdress}</TableCell>
       <TableCell className="text-center">{user.role}</TableCell>
       <TableCell className="text-center">{user.createdAt}</TableCell>
-      <TableCell className="text-center">
+      <TableCell className="text-center flex items-center justify-center gap-3">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>

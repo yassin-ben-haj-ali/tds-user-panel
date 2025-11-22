@@ -5,7 +5,6 @@ export const addUserSchema = z
   .object({
     firstName: z.string().min(1, "Prénom est requis"),
     lastName: z.string().min(1, "Nom est requis"),
-    civility: z.string("Civilité est requis").min(1, "Civilité est requis"),
     role: z.string("Rôle est requis").min(1, "Rôle est requis"),
     mailAdress: z
       .string()

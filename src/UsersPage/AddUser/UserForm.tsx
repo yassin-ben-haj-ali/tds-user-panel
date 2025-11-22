@@ -15,10 +15,6 @@ type Props = {
   setValue: UseFormSetValue<FormValues>;
   watch: UseFormWatch<FormValues>;
 };
-const civilityOptions = [
-  { label: "Monsieur", value: "Mr" },
-  { label: "Madame", value: "Mme" },
-];
 
 const roles = [
   { label: "Gestionnaire", value: "Gestionnaire" },
@@ -63,15 +59,6 @@ const UserForm = ({ register, errors, setValue, watch }: Props) => {
           type="email"
           {...register(`mailAdress`)}
           placeholder="Email"
-        />
-        <CustomSelect
-          options={civilityOptions}
-          required
-          label="Civilité"
-          placeholder="Civilité"
-          value={watch(`civility`)}
-          setValue={(civility) => setValue(`civility`, civility)}
-          error={errors?.civility?.message}
         />
         <div className="z-50 w-full">
           <PhoneInput

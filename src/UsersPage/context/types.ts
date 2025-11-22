@@ -19,7 +19,6 @@ export type User = {
   firstName: string;
   lastName: string;
   mailAdress: string;
-  civility: string;
   role: string;
   telephoneNumber: string;
 };

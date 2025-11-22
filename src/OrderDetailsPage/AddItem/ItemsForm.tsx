@@ -7,8 +7,8 @@ const ItemsForm = () => {
       <div className="space-y-3">
         <CustomInput
           required
-          label="Quantité réçu"
-          placeholder="Quantité réçu"
+          label="Quantité"
+          placeholder="Quantité"
           type="number"
         />
         <CustomDatePicker

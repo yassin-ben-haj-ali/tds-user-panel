@@ -1,9 +1,13 @@
 import { createContext, useState } from "react";
-import type { UsersContextStateType } from "./types";
+import type { User, UsersContextStateType } from "./types";
 
 export const initialState: UsersContextStateType = {
   tableFilters: {
     users: [],
+  },
+  auth: {
+    authenticated: false,
+    user: {} as User,
   },
 };
 

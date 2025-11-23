@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { TableFilter, TableFilters } from "./types";
+import type { authState, TableFilter, TableFilters } from "./types";
 import { initialState, UsersContext } from "./UserContext";
 
 export const useUsersContext = () => {
@@ -19,13 +19,20 @@ export const useUsersContext = () => {
   const resetState = () =>
     setState((prev) => ({
       ...prev,
-      ...initialState,
+      ...initialState.tableFilters,
+    }));
+
+  const setUser = (auth: authState) =>
+    setState((prev) => ({
+      ...prev,
+      auth,
     }));
 
   return {
     ...users,
     setTableFilters,
     resetState,
+    setUser,
     setState,
   };
 };

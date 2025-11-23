@@ -8,25 +8,33 @@ import MyArticlesPage from "./myArticles/myArticlesPage";
 import ManufacturersPage from "./ManufacturersPage/ManufacturersPage";
 import OrdersPage from "./OrdersPage/OrdersPage";
 import OrderDetailsPage from "./OrderDetailsPage/OrderDetailsPage";
+import RequireAuth from "./RequireAuth";
+import PersistLogin from "./PersistLogin";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route
-        path="login"
-        element={
-          <LoginLayout>
-            <LoginPage />
-          </LoginLayout>
-        }
-      ></Route>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to="/home" replace />} />
-        <Route path="/home" element={<UsersPage />} />
-        <Route path="/commands" element={<MyArticlesPage />} />
-        <Route path="/fabricants" element={<ManufacturersPage />} />
-        <Route path="/orders" element={<OrdersPage />} />
-        <Route path="/orders/:id" element={<OrderDetailsPage />} />
+      <Route element={<PersistLogin />}>
+        <Route
+          path="login"
+          element={
+            <LoginLayout>
+              <LoginPage />
+            </LoginLayout>
+          }
+        ></Route>
+      </Route>
+      <Route element={<PersistLogin />}>
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Navigate to="/home" replace />} />
+          <Route element={<RequireAuth />}>
+            <Route path="/home" element={<UsersPage />} />
+            <Route path="/commands" element={<MyArticlesPage />} />
+            <Route path="/fabricants" element={<ManufacturersPage />} />
+            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/orders/:id" element={<OrderDetailsPage />} />
+          </Route>
+        </Route>
       </Route>
       <Route path="*" element={<NotFound />} />
     </Routes>

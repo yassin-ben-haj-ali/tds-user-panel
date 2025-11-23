@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 import EmptyPage from "@/myArticles/emptyPage";
 import AddOrder from "./AddOrder/AddOrder";
 import OrdersList from "./OrdersList";
@@ -35,11 +33,6 @@ const OrdersPage = () => {
       createdAt: "2025-11-21",
     },
   ];
-  const { resetState } = useUsersContext();
-
-  useEffect(() => {
-    resetState();
-  }, []);
 
   return (
     <div className="relative h-full w-full bg-white space-y-7">

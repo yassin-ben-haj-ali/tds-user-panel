@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import LoginRightBlock from "./LoginRightBlock";
 import LogoHeader from "./LogoHeader";
+import { useEffect } from "react";
+import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 
 type Props = {
   children: React.ReactNode;
@@ -8,6 +10,13 @@ type Props = {
 
 const LoginLayout = (props: Props) => {
   const navigate = useNavigate();
+  const { auth } = useUsersContext();
+
+  useEffect(() => {
+    if (auth) {
+      navigate("/", { replace: true });
+    }
+  }, [auth, navigate]);
 
   return (
     <div className="flex w-full">

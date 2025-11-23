@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema, type FormValues } from "./types";
+import useLogin from "./hooks/useLogin";
+import Loader from "@/components/ui/Loader/Loader";
 
 const LoginPage = () => {
   const from = useForm<FormValues>({
@@ -11,8 +13,10 @@ const LoginPage = () => {
   });
   const { register, handleSubmit, formState } = from;
   const { errors } = formState;
-  const onSubmit = (formData: FormValues) => {
-    console.log(formData);
+  const { loginMutation, loginLoading } = useLogin();
+
+  const onSubmit = async (formData: FormValues) => {
+    loginMutation(formData);
   };
 
   return (
@@ -30,8 +34,8 @@ const LoginPage = () => {
         className={"bg-white"}
         passwordinput={false}
         required={true}
-        error={errors.email?.message}
-        {...register("email")}
+        error={errors.mailAdress?.message}
+        {...register("mailAdress")}
       />
       <CustomInput
         type="password"
@@ -62,7 +66,11 @@ const LoginPage = () => {
           className="w-full whitespace-nowrap rounded py-2 font-semibold text-white lg:px-40"
           disabled={false}
         >
-          Se connecter
+          {loginLoading ? (
+            <Loader fillColor="#FFFFFF" width="25" height="25" />
+          ) : (
+            "Se connecter"
+          )}
         </Button>
       </div>
     </form>

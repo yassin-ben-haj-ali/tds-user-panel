@@ -10,8 +10,14 @@ export type TableFilter = {
   customOrder?: string;
 };
 
+export type authState = {
+  authenticated: boolean;
+  user: User;
+};
+
 export type UsersContextStateType = {
   tableFilters: TableFilters;
+  auth: authState;
 };
 
 export type User = {

@@ -16,6 +16,7 @@ import ArticleForm from "./ArticleForm";
 import { addArticleSchema, type FormValues } from "./AddArticleType";
 import EditIcon from "@/assets/EditIcon";
 import type { Article } from "../context/types";
+import useCreateArticle from "../hooks/useCreateArticle";
 
 type AddArticleProps = {
   editMode?: boolean;
@@ -31,9 +32,10 @@ const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
   });
   const { handleSubmit, register, reset, formState, setValue, watch } = form;
   const { errors } = formState;
+  const { createArticleMutation } = useCreateArticle();
 
-  const onSubmit = async (data: FormValues) => {
-    console.log(data);
+  const onSubmit = (data: FormValues) => {
+    createArticleMutation(data);
   };
   useEffect(() => {
     if (open) {
@@ -56,7 +58,9 @@ const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
             <EditIcon />
           </button>
         ) : (
-          <Button type="button" className="h-10">Créer un article</Button>
+          <Button type="button" className="h-10">
+            Créer un article
+          </Button>
         )}
       </DialogTrigger>
       <DialogContent

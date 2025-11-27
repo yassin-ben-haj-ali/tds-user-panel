@@ -11,13 +11,13 @@ export type TableFilter = {
 };
 
 export type authState = {
-  authenticated: boolean;
+  AccessToken: string;
   user: User;
 };
 
 export type UsersContextStateType = {
   tableFilters: TableFilters;
-  auth: authState;
+  auth: authState | null;
 };
 
 export type User = {

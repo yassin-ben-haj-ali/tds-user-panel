@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import useLogout from "@/LoginPage/hooks/useLogout";
 import { NavLink, useNavigate } from "react-router-dom";
 
 type Props = {
@@ -9,11 +10,8 @@ type Props = {
   isActive?: boolean;
 };
 const SideBarLink = (props: Props) => {
+  const { logoutMutation } = useLogout();
   const navigate = useNavigate();
-  const handleLogout = () => {
-    localStorage.removeItem("RefreshToken");
-    navigate("/login");
-  };
 
   return (
     <>
@@ -36,9 +34,11 @@ const SideBarLink = (props: Props) => {
         <div className="w-full -space-y-1">
           <NavLink
             to={props.to}
-            onClick={() => {
+            onClick={async (e) => {
               if (props.to === "/login") {
-                handleLogout();
+                e.preventDefault();
+                await logoutMutation();
+                navigate("/login", { replace: true });
               }
             }}
             className={(navData) => {

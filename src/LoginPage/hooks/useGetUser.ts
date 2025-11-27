@@ -1,45 +1,42 @@
-import type { User } from "@/UsersPage/context/types";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { useUsersContext } from "@/UsersPage/context/useUsersContext";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import type { AxiosInstance } from "axios";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import type { User } from "@/UsersPage/context/types";
 
-type getUserResponse = {
-  message: string;
+type ActiveUserResponse = {
   user: User;
 };
 
-const getUser = async (): Promise<getUserResponse> => {
-  const response = await axios.get("http://localhost:5000/api/v1/auth/me", {
-    withCredentials: true,
-  });
+const getActiveUser = async (
+  axiosPrivate: AxiosInstance
+): Promise<ActiveUserResponse> => {
+  const response = await axiosPrivate.get("/auth/me");
   return response.data;
 };
 
 const useGetUser = () => {
-  const { setUser } = useUsersContext();
-  const navigate = useNavigate();
-
-  const { mutateAsync: getUserMutation } = useMutation({
-    mutationFn: async () => {
-      try {
-        const data = await getUser();
-        setUser({
-          authenticated: true,
-          user: data.user,
-        });
-        return data.user;
-      } catch (error: unknown) {
-        setUser({
-          authenticated: false,
-          user: {} as User,
-        });
-        navigate("/login");
-        throw error;
-      }
-    },
+  const { auth, setUser } = useUsersContext();
+  const axiosPrivate = useAxiosPrivate();
+  const getUserQuery = useQuery({
+    queryKey: ["UserInfo"],
+    queryFn: () => getActiveUser(axiosPrivate),
+    enabled: !!auth?.AccessToken,
+    refetchOnMount: true,
+    retry: false,
+    refetchOnWindowFocus: false,
   });
-  return getUserMutation;
+
+  useEffect(() => {
+    if (getUserQuery.data && auth) {
+      setUser({
+        ...auth,
+        user: getUserQuery.data.user,
+      });
+    }
+  }, [getUserQuery.data]);
+  return getUserQuery;
 };
 
 export default useGetUser;

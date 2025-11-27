@@ -22,7 +22,7 @@ export const useUsersContext = () => {
       ...initialState.tableFilters,
     }));
 
-  const setUser = (auth: authState) =>
+  const setUser = (auth: authState | null) =>
     setState((prev) => ({
       ...prev,
       auth,

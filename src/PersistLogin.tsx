@@ -1,23 +1,23 @@
 import { Outlet } from "react-router-dom";
+import useRefreshToken from "@/LoginPage/hooks/useRefreshToken";
 import Loader from "./components/ui/Loader/Loader";
-import useGetUser from "./LoginPage/hooks/useGetUser";
 import { useEffect, useState } from "react";
 
 const PersistLogin = () => {
-  const getUserMutation = useGetUser();
+  const getNewAccessToken = useRefreshToken();
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const getActiveUser = async () => {
+    const refreshToken = async () => {
       try {
-        await getUserMutation();
+        await getNewAccessToken();
       } finally {
         setIsLoading(false);
       }
     };
-    getActiveUser();
-  }, [getUserMutation]);
 
+    refreshToken();
+  }, [getNewAccessToken]);
   return (
     <>
       {isLoading ? (

@@ -1,7 +1,7 @@
+import axios from "@/api/axios";
 import type { User } from "@/UsersPage/context/types";
 import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 type loginCredentials = {
@@ -12,16 +12,11 @@ type loginCredentials = {
 type loginResponse = {
   message: string;
   user: User;
+  token: string;
 };
 
 const login = async (credentials: loginCredentials): Promise<loginResponse> => {
-  const response = await axios.post(
-    "http://localhost:5000/api/v1/auth/login",
-    credentials,
-    {
-      withCredentials: true,
-    }
-  );
+  const response = await axios.post("/auth/login", credentials);
   return response.data;
 };
 
@@ -31,9 +26,11 @@ const useLogin = () => {
   const { mutateAsync: loginMutation, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
+      const { user, token } = data;
+      localStorage.setItem("access-token", data.token);
       setUser({
-        authenticated: true,
-        user: data.user,
+        AccessToken: token,
+        user,
       });
       navigate("/");
     },

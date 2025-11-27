@@ -11,6 +11,12 @@ import {
 import AddManufacturer from "../AddManufacturer/AddManufacturer";
 import ConfirmModal from "@/layouts/ConfirmModal";
 import ViewManufacturerInfo from "../ViewManufacturer/ViewManufacturer";
+import useGetManufacturers from "../hooks/useGetManufacturers";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import { useManufacturersContext } from "../context/useManufacturersContext";
+import { formatDate } from "@/utils/functions";
+import useDeleteManufacturer from "../hooks/useDeleteManufacturer";
 
 const headers = [
   {
@@ -50,26 +56,22 @@ const headers = [
   },
 ];
 
-const manufacturers = [
-  {
-    id: "1",
-    name: "usine1",
-    mailAdress: "usine1@yopmail.com",
-    adress: "rue taha hassine - 4013",
-    telephoneNumber: "+216 50889124",
-    createdAt: "2025-10-01",
-  },
-  {
-    id: "2",
-    name: "usine2",
-    mailAdress: "usine2@yopmail.com",
-    adress: "rue d'independance - 4030",
-    telephoneNumber: "+216 50889126",
-    createdAt: "2025-09-15",
-  },
-];
-
 const ManufacturersTable = () => {
+  const { ref, inView } = useInView();
+  const { manufacturers } = useManufacturersContext();
+  const getManufacturersQuery = useGetManufacturers();
+  const { deleteManufacturerMutation, deleteManufacturerLoading } =
+    useDeleteManufacturer();
+
+  useEffect(() => {
+    if (inView && getManufacturersQuery.hasNextPage) {
+      getManufacturersQuery.fetchNextPage();
+    }
+  }, [
+    inView,
+    getManufacturersQuery.hasNextPage,
+    getManufacturersQuery.fetchNextPage,
+  ]);
   const manufacturersRows = manufacturers.map((manufacturer, index) => (
     <TableRow key={index}>
       <TableCell className="text-center font-medium">
@@ -86,7 +88,9 @@ const ManufacturersTable = () => {
       <TableCell className="text-center font-medium">
         {manufacturer.adress}
       </TableCell>
-      <TableCell className="text-center">{manufacturer.createdAt}</TableCell>
+      <TableCell className="text-center">
+        {formatDate(manufacturer.createdAt)}
+      </TableCell>
       <TableCell className="text-center">
         <TooltipProvider>
           <Tooltip>
@@ -105,10 +109,11 @@ const ManufacturersTable = () => {
                 type="delete"
                 title={"Êtes-vous sûr de vouloir supprimer le fabriquant"}
                 description={""}
-                handleConfirm={(e) => {
+                handleConfirm={async (e) => {
                   e.stopPropagation();
+                  await deleteManufacturerMutation(manufacturer.id);
                 }}
-                isLoading={false}
+                isLoading={deleteManufacturerLoading}
               />
             </TooltipTrigger>
             <TooltipContent>
@@ -119,17 +124,13 @@ const ManufacturersTable = () => {
       </TableCell>
     </TableRow>
   ));
-
-  const isFetchingNextPage = false;
-  const isLoading = false;
-
   return (
     <>
       <CustomTable
         headers={headers}
         data={
           <>
-            {isLoading ? (
+            {getManufacturersQuery.isLoading ? (
               <TableRow>
                 <TableCell colSpan={headers.length + 1} className="min-h-full">
                   <Loader className="flex h-full w-full items-center justify-center" />
@@ -138,9 +139,9 @@ const ManufacturersTable = () => {
             ) : (
               <>
                 {manufacturersRows}
-                <TableRow>
+                <TableRow ref={ref}>
                   <TableCell colSpan={headers.length + 1} className="h-full">
-                    {isFetchingNextPage && (
+                    {getManufacturersQuery.isFetchingNextPage && (
                       <Loader className="flex w-full items-center justify-center" />
                     )}
                   </TableCell>
@@ -150,7 +151,10 @@ const ManufacturersTable = () => {
           </>
         }
         filterType="users"
-        hasData={true}
+        hasData={
+          getManufacturersQuery.isLoading ||
+          getManufacturersQuery?.data?.pages[0]?.totalCount !== 0
+        }
       />
     </>
   );

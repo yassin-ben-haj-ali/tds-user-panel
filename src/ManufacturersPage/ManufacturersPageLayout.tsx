@@ -1,12 +1,14 @@
 import { CustomInput } from "@/components/ui/CustomInput";
 import { SearchIcon } from "@/assets/SearchIcon";
 import AddManufacturer from "./AddManufacturer/AddManufacturer";
+import { useManufacturersContext } from "./context/useManufacturersContext";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const ManufacturersPageLayout = (props: Props) => {
+  const { searchWord, setSearchWord } = useManufacturersContext();
   return (
     <div className="h-full space-y-7">
       <div className="w-full space-y-3">
@@ -26,6 +28,8 @@ const ManufacturersPageLayout = (props: Props) => {
             label=""
             className="rounded-lg border-[#E6E6E6] bg-[#FAFAFA] py-2 pl-12 pr-4"
             placeholder={"Rechercher"}
+            value={searchWord}
+            onChange={(e) => setSearchWord(e.target.value)}
           />
         </div>
         <AddManufacturer />

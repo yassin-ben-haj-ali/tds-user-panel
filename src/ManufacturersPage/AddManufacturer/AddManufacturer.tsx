@@ -15,7 +15,8 @@ import Loader from "@/components/ui/Loader/Loader";
 import UserForm from "./ManufacturerForm";
 import { addManufacturerSchema, type FormValues } from "./AddManufacturerType";
 import EditIcon from "@/assets/EditIcon";
-import type { Manufacturer } from "../ViewManufacturer/ViewManufacturer";
+import usecreateManufacturers from "../hooks/useCreateManufacturers";
+import type { Manufacturer } from "../context/types";
 
 type AddManufacturerProps = {
   editMode?: boolean;
@@ -26,7 +27,6 @@ const AddManufacturer: React.FC<AddManufacturerProps> = ({
   editMode,
   manufacturer,
 }) => {
-  const isLoading = false;
   const [open, setOpen] = useState(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(addManufacturerSchema),
@@ -34,8 +34,12 @@ const AddManufacturer: React.FC<AddManufacturerProps> = ({
   const { handleSubmit, register, reset, formState, setValue, watch } = form;
   const { errors } = formState;
 
+  const { createManufacturersMutation, createManufacturersLoading } =
+    usecreateManufacturers();
+
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
+    await createManufacturersMutation(data);
+    setOpen(false);
   };
   useEffect(() => {
     if (open) {
@@ -95,7 +99,7 @@ const AddManufacturer: React.FC<AddManufacturerProps> = ({
           />
           <DialogFooter className="flex items-center justify-center!">
             <Button className="w-4/5" type="submit">
-              {isLoading ? (
+              {createManufacturersLoading ? (
                 <Loader fillColor="#FFFFFF" width="25" height="25" />
               ) : editMode ? (
                 "Modifier"

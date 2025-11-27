@@ -5,6 +5,7 @@ export const initialState: UsersContextStateType = {
   tableFilters: {
     users: [],
     articles: [],
+    manufacturers: [],
   },
   auth: null,
 };

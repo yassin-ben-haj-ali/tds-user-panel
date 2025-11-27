@@ -10,15 +10,6 @@ import { X } from "lucide-react";
 import Loader from "@/components/ui/Loader/Loader";
 import ManufacturerDetails from "./ManufacturerDetails";
 
-export type Manufacturer = {
-  id: string;
-  name: string;
-  adress: string;
-  mailAdress: string;
-  telephoneNumber: string;
-  createdAt: string;
-};
-
 type Props = {
   id?: string;
   showingComponent: ReactElement;

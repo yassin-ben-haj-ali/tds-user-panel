@@ -1,6 +1,7 @@
 export type TableFilters = {
   users: TableFilter[];
   articles: TableFilter[];
+  manufacturers: TableFilter[];
 };
 
 export type TableFilter = {

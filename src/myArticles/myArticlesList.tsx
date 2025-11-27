@@ -9,7 +9,7 @@ const MyArticlesList = () => {
     <div className="h-full space-y-5 p-3">
       <Stepper />
       <div className="h-[75%] space-y-5">
-        <div className="h-4/5 w-full rounded border-2 border-x-2 border-dashed border-[#dee2e6] px-2 py-6">
+        <div className="w-full rounded border-2 border-x-2 border-dashed border-[#dee2e6] px-2 py-6">
           <div className="flex h-full flex-col">
             <div className="flex items-center justify-center md:justify-end gap-3">
               <div className="relative w-auto">

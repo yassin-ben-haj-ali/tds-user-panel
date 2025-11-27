@@ -1,11 +1,13 @@
 export type Article = {
   id: string;
-  numero: string;
-  received_qty: number;
-  date_export: string;
+  number: string;
+  quantity: number;
+  exportedAt: string;
   status?: string;
 };
 
 export type ArticleContextStateType = {
   formStep: number;
+  articles: Article[];
+  searchWord: string;
 };

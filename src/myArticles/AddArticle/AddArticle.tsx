@@ -24,7 +24,6 @@ type AddArticleProps = {
 };
 
 const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
-  const isLoading = false;
   const [open, setOpen] = useState(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(addArticleSchema),
@@ -32,17 +31,18 @@ const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
   });
   const { handleSubmit, register, reset, formState, setValue, watch } = form;
   const { errors } = formState;
-  const { createArticleMutation } = useCreateArticle();
+  const { createArticleMutation, createArticleLoading } = useCreateArticle();
 
-  const onSubmit = (data: FormValues) => {
-    createArticleMutation(data);
+  const onSubmit = async (data: FormValues) => {
+    await createArticleMutation(data);
+    setOpen(false);
   };
   useEffect(() => {
     if (open) {
       if (editMode && article) {
         reset({
           ...article,
-          date_export: new Date(article.date_export),
+          exportedAt: new Date(article.exportedAt),
         });
       } else {
         reset();
@@ -100,7 +100,7 @@ const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
           />
           <DialogFooter className="flex items-center justify-center!">
             <Button className="w-4/5" type="submit">
-              {isLoading ? (
+              {createArticleLoading ? (
                 <Loader fillColor="#FFFFFF" width="25" height="25" />
               ) : editMode ? (
                 "Modifier"

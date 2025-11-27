@@ -3,6 +3,8 @@ import type { ArticleContextStateType } from "./types";
 
 export const initialState: ArticleContextStateType = {
   formStep: 1,
+  articles: [],
+  searchWord: "",
 };
 
 type ArticlesContextType = {
@@ -12,7 +14,11 @@ type ArticlesContextType = {
 
 export const ArticlesContext = createContext<ArticlesContextType | null>(null);
 
-export const ArticlesProvider = ({ children }: { children: React.ReactNode }) => {
+export const ArticlesProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const [articles, setState] = useState(initialState);
 
   return (

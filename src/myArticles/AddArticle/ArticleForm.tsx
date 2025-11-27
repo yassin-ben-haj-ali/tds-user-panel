@@ -23,23 +23,23 @@ const ArticleForm = ({ register, errors, setValue }: Props) => {
           required
           label="Numéro d'article"
           placeholder="Numéro d'article"
-          error={errors.numero?.message}
-          {...register("numero")}
+          error={errors.number?.message}
+          {...register("number")}
         />
         <CustomInput
           required
           label="Quantité réçu"
           placeholder="Quantité réçu"
           type="number"
-          error={errors.received_qty?.message}
-          {...register("received_qty",{valueAsNumber:true})}
+          error={errors.quantity?.message}
+          {...register("quantity", { valueAsNumber: true })}
         />
         <CustomDatePicker
           id="date"
           label="date d'export"
           className="pointer-events-auto flex w-full items-center justify-center rounded-md border border-[#E6E6E6] bg-[#FAFAFA] text-[#4c4c4c] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary"
           required={true}
-          error={errors.date_export?.message}
+          error={errors.exportedAt?.message}
           onChange={(dateValue) => {
             if (dateValue) {
               const { year, month, day } = dateValue;
@@ -59,7 +59,7 @@ const ArticleForm = ({ register, errors, setValue }: Props) => {
                 seconds,
                 milliseconds
               );
-              setValue("date_export", formattedDate);
+              setValue("exportedAt", formattedDate);
             }
           }}
         />

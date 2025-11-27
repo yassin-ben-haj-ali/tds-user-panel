@@ -4,6 +4,7 @@ import type { UsersContextStateType } from "./types";
 export const initialState: UsersContextStateType = {
   tableFilters: {
     users: [],
+    articles: [],
   },
   auth: null,
 };

@@ -7,19 +7,46 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Loader from "@/components/ui/Loader/Loader";
 import EditIcon from "@/assets/EditIcon";
 import OrderForm from "./OrderForm";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { addOrderSchema, type FormValues } from "./AddOrderType";
+import useCreateOrder from "../hooks/useCreateOrder";
+import type { Order } from "../context/types";
 
 type AddOrderProps = {
   editMode?: boolean;
+  order?: Order;
 };
 
-const AddOrder: React.FC<AddOrderProps> = ({ editMode }) => {
-  const isLoading = false;
+const AddOrder: React.FC<AddOrderProps> = ({ editMode, order }) => {
   const [open, setOpen] = useState(false);
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(addOrderSchema),
+    defaultValues: {} as FormValues,
+  });
+  const { createOrderMutation, createOrderLoading } = useCreateOrder();
+  const { handleSubmit, register, reset, formState, setValue, watch } = form;
+  const { errors } = formState;
+
+  const onSubmit = async (data: FormValues) => {
+    await createOrderMutation(data);
+    setOpen(false);
+  };
+  useEffect(() => {
+    if (open) {
+      if (editMode && order) {
+        reset(order);
+      } else {
+        reset();
+      }
+    }
+  }, [open, reset]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -55,11 +82,23 @@ const AddOrder: React.FC<AddOrderProps> = ({ editMode }) => {
             </div>
           </DialogTitle>
         </DialogHeader>
-        <form className="space-y-3" noValidate>
-          <OrderForm />
+        <form
+          className="space-y-3"
+          onSubmit={(e) => {
+            e.stopPropagation();
+            handleSubmit(onSubmit)(e);
+          }}
+          noValidate
+        >
+          <OrderForm
+            register={register}
+            watch={watch}
+            setValue={setValue}
+            errors={errors}
+          />
           <DialogFooter className="flex items-center justify-center!">
             <Button className="w-4/5" type="submit">
-              {isLoading ? (
+              {createOrderLoading ? (
                 <Loader fillColor="#FFFFFF" width="25" height="25" />
               ) : editMode ? (
                 "Modifier"

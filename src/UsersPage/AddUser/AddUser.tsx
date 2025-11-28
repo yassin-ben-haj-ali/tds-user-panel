@@ -16,6 +16,7 @@ import UserForm from "./UserForm";
 import { addUserSchema, type FormValues } from "./AddUserType";
 import EditIcon from "@/assets/EditIcon";
 import type { User } from "../context/types";
+import useCreateUser from "../hooks/useCreateUser";
 
 type AddUserProps = {
   editMode?: boolean;
@@ -23,7 +24,6 @@ type AddUserProps = {
 };
 
 const AddUser: React.FC<AddUserProps> = ({ editMode, user }) => {
-  const isLoading = false;
   const [open, setOpen] = useState(false);
   const form = useForm<FormValues>({
     resolver: zodResolver(addUserSchema),
@@ -31,8 +31,11 @@ const AddUser: React.FC<AddUserProps> = ({ editMode, user }) => {
   const { handleSubmit, register, reset, formState, setValue, watch } = form;
   const { errors } = formState;
 
+  const { createUserLoading, createUserMutation } = useCreateUser();
+
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
+    await createUserMutation(data);
+    setOpen(false);
   };
   useEffect(() => {
     if (open) {
@@ -92,7 +95,7 @@ const AddUser: React.FC<AddUserProps> = ({ editMode, user }) => {
           />
           <DialogFooter className="flex items-center justify-center!">
             <Button className="w-4/5" type="submit">
-              {isLoading ? (
+              {createUserLoading ? (
                 <Loader fillColor="#FFFFFF" width="25" height="25" />
               ) : editMode ? (
                 "Modifier"

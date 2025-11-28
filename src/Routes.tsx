@@ -25,23 +25,23 @@ const AppRoutes = () => {
             </LoginLayout>
           }
         ></Route>
-        <Route
-          path="auth/verify-email"
-          element={
-            <LoginLayout>
-              <VerifyEmailPage />
-            </LoginLayout>
-          }
-        />
-        <Route
-          path="auth/reset-password"
-          element={
-            <LoginLayout>
-              <ResetPasswordPage />
-            </LoginLayout>
-          }
-        />
       </Route>
+      <Route
+        path="auth/verify-email"
+        element={
+          <LoginLayout>
+            <VerifyEmailPage />
+          </LoginLayout>
+        }
+      />
+      <Route
+        path="auth/reset-password"
+        element={
+          <LoginLayout>
+            <ResetPasswordPage />
+          </LoginLayout>
+        }
+      />
       <Route element={<PersistLogin />}>
         <Route path="/" element={<Layout />}>
           <Route index element={<Navigate to="/home" replace />} />

@@ -17,8 +17,8 @@ type Props = {
 };
 
 const roles = [
-  { label: "Gestionnaire", value: "Gestionnaire" },
-  { label: "Technicien", value: "Technicien" },
+  { label: "Gestionnaire", value: "GESTIONNAIRE" },
+  { label: "Technicien", value: "TECHNICIEN" },
 ];
 
 const UserForm = ({ register, errors, setValue, watch }: Props) => {

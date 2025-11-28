@@ -1,66 +1,65 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import Loader from "@/components/ui/Loader/Loader";
 import NoResults from "@/components/ui/NoResults";
-import type { Order } from "./OrderCard";
-import AddOrder from "../AddOrder/AddOrder";
 import OrderCard from "./OrderCard";
 import EmptyPage from "@/myArticles/emptyPage";
+import { useInView } from "react-intersection-observer";
+import useGetOrders from "../hooks/useGetOrders";
+import type { Order } from "../context/types";
+import AddOrder from "../AddOrder/AddOrder";
 
 const Orders = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const loading = false;
-  const error = false;
+  const { ref, inView } = useInView({
+    threshold: 0,
+  });
 
-  const ListOrders: Order[] = [
-    {
-      id: "1",
-      article: {
-        id: "1",
-        number: "commande-1",
-        exportedAt: "12-05-2025",
-        status: "En stock",
-        quantity: 150,
+  const getOrdersQuery = useGetOrders({
+    filters: {
+      orderBy: {
+        key: "createdAt",
+        value: "desc",
       },
-      fabriquant: {
-        id: "2",
-        name: "usine2",
-        mailAdress: "usine2@yopmail.com",
-        adress: "rue d'independance - 4030",
-        telephoneNumber: "+216 50889126",
-        createdAt: "2025-09-15",
-      },
-      technicien: {
-        id: "3",
-        firstName: "admin",
-        lastName: "super",
-        mailAdress: "admin@yopmail.com",
-        role: "Administrateur",
-        telephoneNumber: "+216 50889123",
-      },
-      createdAt: "2025-11-21",
     },
-  ];
+  });
+  const statusFetch = getOrdersQuery?.status;
 
-  if (loading) {
+  useEffect(() => {
+    if (
+      inView &&
+      getOrdersQuery.hasNextPage &&
+      !getOrdersQuery.isFetchingNextPage
+    ) {
+      getOrdersQuery.fetchNextPage();
+    }
+  }, [inView, getOrdersQuery.hasNextPage, getOrdersQuery.isFetchingNextPage]);
+
+  const ListOrders: Order[] =
+    getOrdersQuery.data?.pages.flatMap((page) => page.paginatedResult) || [];
+
+  if (statusFetch === "pending") {
     return (
       <Loader className="flex h-full w-full items-center justify-center" />
     );
   }
 
-  if (error) {
-    return <EmptyPage name="ordre" component={<AddOrder />} />;
+  if (statusFetch === "error") {
+    return <EmptyPage name="article" component={<AddOrder />} />;
   }
   return ListOrders.length ? (
-    <div
-      ref={containerRef}
-      className="h-full max-h-[400px] overflow-y-auto"
-    >
+    <div ref={containerRef} className="h-full max-h-[400px] overflow-y-auto">
       {" "}
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2">
         {ListOrders.map((order) => (
           <OrderCard order={order} />
         ))}
       </div>
+      <div ref={ref} className="h-10 w-full" />
+      {getOrdersQuery.isFetchingNextPage && (
+        <div className="flex justify-center py-4">
+          <Loader />
+        </div>
+      )}
     </div>
   ) : (
     <NoResults />

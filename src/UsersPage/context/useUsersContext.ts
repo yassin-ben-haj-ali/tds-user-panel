@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { authState, TableFilter, TableFilters } from "./types";
+import type { authState, TableFilter, TableFilters, User } from "./types";
 import { initialState, UsersContext } from "./UserContext";
 
 export const useUsersContext = () => {
@@ -28,11 +28,27 @@ export const useUsersContext = () => {
       auth,
     }));
 
+  const setUsers = (users: User[]) => {
+    setState((prev) => ({
+      ...prev,
+      userList: users,
+    }));
+  };
+
+  const setSearchWord = (searchWord: string) => {
+    setState((prev) => ({
+      ...prev,
+      searchWord,
+    }));
+  };
+
   return {
     ...users,
     setTableFilters,
     resetState,
     setUser,
+    setUsers,
+    setSearchWord,
     setState,
   };
 };

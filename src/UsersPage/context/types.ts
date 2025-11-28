@@ -20,6 +20,8 @@ export type authState = {
 export type UsersContextStateType = {
   tableFilters: TableFilters;
   auth: authState | null;
+  userList: User[];
+  searchWord: string;
 };
 
 export type User = {
@@ -29,4 +31,6 @@ export type User = {
   mailAdress: string;
   role: string;
   telephoneNumber: string;
+  countryCode: string;
+  createdAt: string;
 };

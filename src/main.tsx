@@ -7,6 +7,7 @@ import { HeroUIProvider } from "@heroui/react";
 import { ArticlesProvider } from "./myArticles/context/ArticleContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ManufacturersProvider } from "./ManufacturersPage/context/ManufacturerContext.tsx";
+import { OrdersProvider } from "./OrdersPage/context/OrdersContext.tsx";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +18,9 @@ createRoot(document.getElementById("root")!).render(
         <UsersProvider>
           <ArticlesProvider>
             <ManufacturersProvider>
-              <App />
+              <OrdersProvider>
+                <App />
+              </OrdersProvider>
             </ManufacturersProvider>
           </ArticlesProvider>
         </UsersProvider>

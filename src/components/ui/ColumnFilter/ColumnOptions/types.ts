@@ -1,4 +1,4 @@
-export type FilterType = "users";
+export type FilterType = "users"| "manufacturers";
 
 export type FilterOption = {
   id: number | string;

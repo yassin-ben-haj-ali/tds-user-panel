@@ -8,6 +8,8 @@ export const initialState: UsersContextStateType = {
     manufacturers: [],
   },
   auth: null,
+  userList: [],
+  searchWord: "",
 };
 
 type UsersContextType = {

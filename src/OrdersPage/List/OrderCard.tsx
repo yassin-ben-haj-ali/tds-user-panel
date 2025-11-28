@@ -9,19 +9,9 @@ import { badgeVariants } from "@/components/ui/badge";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import ConfirmModal from "@/layouts/ConfirmModal";
-import type { User } from "@/UsersPage/context/types";
-import type { Article } from "@/myArticles/context/types";
 import ViewIcon from "@/assets/ViewIcon";
 import { useNavigate } from "react-router-dom";
-import type { Manufacturer } from "@/ManufacturersPage/context/types";
-
-export type Order = {
-  id: string;
-  fabriquant: Manufacturer;
-  technicien: User;
-  article: Article;
-  createdAt: string;
-};
+import type { Order } from "../context/types";
 
 type OrderCardProps = {
   order: Order;
@@ -36,12 +26,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
     });
     return formattedDate;
   };
-
   return (
     <Card className="flex flex-col border-[#cac9c9] transition-all">
       <CardHeader className="w-full flex justify-between">
         <CardTitle className="text-lg capitalize">
-          {order.article.number}
+          {order.article?.number}
         </CardTitle>
         <div className="flex gap-3 items-center justify-center">
           <button
@@ -65,11 +54,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
       </CardHeader>
       <CardDescription className="font-medium text-primary text-lg px-6 space-y-3">
         <p>
-          fabriquant:<strong>{order.fabriquant.name}</strong>
+          fabriquant:<strong>{order.fabriquant?.name}</strong>
         </p>
         <p>
           technicien:
-          <strong>{`${order.technicien.firstName} ${order.technicien.lastName}`}</strong>
+          <strong>{`${order.technicien?.firstName} ${order.technicien?.lastName}`}</strong>
         </p>
       </CardDescription>
       <CardContent className="flex flex-col items-center gap-3 pt-3 lg:justify-between xl:flex-row">
@@ -78,7 +67,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
             variant: "outline",
           })}`}
         >
-          {`Clôturé depuis ${formatDate(order.article.exportedAt)}`}
+          {`Clôturé depuis ${formatDate(order.article?.exportedAt)}`}
         </span>
       </CardContent>
     </Card>

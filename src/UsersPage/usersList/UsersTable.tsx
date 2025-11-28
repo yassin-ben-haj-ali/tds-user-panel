@@ -11,6 +11,12 @@ import {
 } from "@/components/ui/tooltip";
 import AddUser from "../AddUser/AddUser";
 import ConfirmModal from "@/layouts/ConfirmModal";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import useGetUsers from "../hooks/useGetUsers";
+import { useUsersContext } from "../context/useUsersContext";
+import { formatDate } from "@/utils/functions";
+import useDeleteUser from "../hooks/useDeleteUser";
 
 const headers = [
   {
@@ -49,38 +55,17 @@ const headers = [
   },
 ];
 
-const users = [
-  {
-    id: "1",
-    firstName: "gestionnaire1",
-    lastName: "ben younes",
-    mailAdress: "test@yopmail.com",
-    role: "Gestionnaire",
-    telephoneNumber: "+216 50889124",
-    createdAt: "2023-10-01",
-  },
-  {
-    id: "2",
-    firstName: "foulen",
-    lastName: "ben foulen",
-    mailAdress: "foulen@yopmail.com",
-    role: "Technicien",
-    telephoneNumber: "+216 50889126",
-    createdAt: "2023-09-15",
-  },
-  {
-    id: "3",
-    firstName: "admin",
-    lastName: "super",
-    mailAdress: "admin@yopmail.com",
-    role: "Administrateur",
-    telephoneNumber: "+216 50889123",
-    createdAt: "2023-08-20",
-  },
-];
-
 const UsersTable = () => {
-  const usersRows = users.map((user, index) => (
+  const { ref, inView } = useInView();
+  const { userList } = useUsersContext();
+  const getUsersQuery = useGetUsers();
+  const { deleteUserLoading, deleteUserMutation } = useDeleteUser();
+  useEffect(() => {
+    if (inView && getUsersQuery.hasNextPage) {
+      getUsersQuery.fetchNextPage();
+    }
+  }, [inView, getUsersQuery.hasNextPage, getUsersQuery.fetchNextPage]);
+  const usersRows = userList.map((user, index) => (
     <TableRow key={index}>
       <TableCell className="text-center font-medium">
         <ViewUserInfo
@@ -94,7 +79,9 @@ const UsersTable = () => {
       </TableCell>
       <TableCell className="text-center">{user.mailAdress}</TableCell>
       <TableCell className="text-center">{user.role}</TableCell>
-      <TableCell className="text-center">{user.createdAt}</TableCell>
+      <TableCell className="text-center">
+        {formatDate(user.createdAt)}
+      </TableCell>
       <TableCell className="text-center flex items-center justify-center gap-3">
         <TooltipProvider>
           <Tooltip>
@@ -113,10 +100,11 @@ const UsersTable = () => {
                 type="delete"
                 title={"Êtes-vous sûr de vouloir supprimer l'utilisateur"}
                 description={""}
-                handleConfirm={(e) => {
+                handleConfirm={async (e) => {
                   e.stopPropagation();
+                  await deleteUserMutation(user.id);
                 }}
-                isLoading={false}
+                isLoading={deleteUserLoading}
               />
             </TooltipTrigger>
             <TooltipContent>
@@ -128,16 +116,13 @@ const UsersTable = () => {
     </TableRow>
   ));
 
-  const isFetchingNextPage = false;
-  const isLoading = false;
-
   return (
     <>
       <CustomTable
         headers={headers}
         data={
           <>
-            {isLoading ? (
+            {getUsersQuery.isLoading ? (
               <TableRow>
                 <TableCell colSpan={headers.length + 1} className="min-h-full">
                   <Loader className="flex h-full w-full items-center justify-center" />
@@ -146,9 +131,9 @@ const UsersTable = () => {
             ) : (
               <>
                 {usersRows}
-                <TableRow>
+                <TableRow ref={ref}>
                   <TableCell colSpan={headers.length + 1} className="h-full">
-                    {isFetchingNextPage && (
+                    {getUsersQuery.isFetchingNextPage && (
                       <Loader className="flex w-full items-center justify-center" />
                     )}
                   </TableCell>
@@ -158,7 +143,10 @@ const UsersTable = () => {
           </>
         }
         filterType="users"
-        hasData={true}
+        hasData={
+          getUsersQuery.isLoading ||
+          getUsersQuery?.data?.pages[0]?.totalCount !== 0
+        }
       />
     </>
   );

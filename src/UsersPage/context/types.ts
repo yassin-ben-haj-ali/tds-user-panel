@@ -2,6 +2,7 @@ export type TableFilters = {
   users: TableFilter[];
   articles: TableFilter[];
   manufacturers: TableFilter[];
+  items: TableFilter[];
 };
 
 export type TableFilter = {

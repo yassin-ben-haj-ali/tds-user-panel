@@ -7,9 +7,9 @@ type Props = {
   user: User | undefined;
 };
 const roles = [
-  { label: "Gestionnaire", value: "Gestionnaire" },
-  { label: "Technicien", value: "Technicien" },
-  { label: "Administrateur", value: "Administrateur" },
+  { label: "Gestionnaire", value: "GESTIONNAIRE" },
+  { label: "Technicien", value: "TECHNICIEN" },
+  { label: "Administrateur", value: "ADMIN" },
 ];
 const UserDetails = ({ user }: Props) => {
   return (

@@ -7,11 +7,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Loader from "@/components/ui/Loader/Loader";
 import EditIcon from "@/assets/EditIcon";
 import ItemsForm from "./ItemsForm";
+import useCreateOrderItems from "../hooks/useCreateOrderItems";
+import { useParams } from "react-router-dom";
 
 type Items = {
   quantité: number;
@@ -24,8 +26,26 @@ type AddItemsProps = {
 };
 
 const AddItems: React.FC<AddItemsProps> = ({ editMode }) => {
-  const isLoading = false;
   const [open, setOpen] = useState(false);
+  const [quantity, setQuantity] = useState<number | null>(null);
+  const { id } = useParams();
+  const { createOrderItemsMutation, createOrderItemsLoading } =
+    useCreateOrderItems();
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!id) return;
+    await createOrderItemsMutation({
+      orderId: id,
+      quantity: quantity ?? 0,
+    });
+    setOpen(false);
+    setQuantity(null);
+  };
+
+  useEffect(() => {
+    setQuantity(null);
+  }, [open]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -61,11 +81,11 @@ const AddItems: React.FC<AddItemsProps> = ({ editMode }) => {
             </div>
           </DialogTitle>
         </DialogHeader>
-        <form className="space-y-3" noValidate>
-          <ItemsForm />
+        <form className="space-y-3" noValidate onSubmit={handleSubmit}>
+          <ItemsForm quantity={quantity} setQuantity={setQuantity} />
           <DialogFooter className="flex items-center justify-center!">
             <Button className="w-4/5" type="submit">
-              {isLoading ? (
+              {createOrderItemsLoading ? (
                 <Loader fillColor="#FFFFFF" width="25" height="25" />
               ) : editMode ? (
                 "Modifier"

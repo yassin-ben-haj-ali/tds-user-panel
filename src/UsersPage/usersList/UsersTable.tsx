@@ -57,8 +57,19 @@ const headers = [
 
 const UsersTable = () => {
   const { ref, inView } = useInView();
-  const { userList } = useUsersContext();
-  const getUsersQuery = useGetUsers();
+  const { userList, auth } = useUsersContext();
+  const getUsersQuery = useGetUsers({
+    filters: auth?.user
+      ? [
+          {
+            filterKey: "id",
+            filterValue: auth.user.id,
+            optionName: "user",
+            customFilter: `where[id][not]=${auth.user.id}`,
+          },
+        ]
+      : undefined,
+  });
   const { deleteUserLoading, deleteUserMutation } = useDeleteUser();
   useEffect(() => {
     if (inView && getUsersQuery.hasNextPage) {

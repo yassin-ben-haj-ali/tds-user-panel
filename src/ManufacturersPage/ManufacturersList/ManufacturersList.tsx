@@ -150,7 +150,7 @@ const ManufacturersTable = () => {
             )}
           </>
         }
-        filterType="users"
+        filterType="manufacturers"
         hasData={
           getManufacturersQuery.isLoading ||
           getManufacturersQuery?.data?.pages[0]?.totalCount !== 0

@@ -12,6 +12,7 @@ import ConfirmModal from "@/layouts/ConfirmModal";
 import ViewIcon from "@/assets/ViewIcon";
 import { useNavigate } from "react-router-dom";
 import type { Order } from "../context/types";
+import useDeleteOrder from "../hooks/useDeleteOrder";
 
 type OrderCardProps = {
   order: Order;
@@ -19,6 +20,7 @@ type OrderCardProps = {
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const navigate = useNavigate();
+  const { deleteOrderLoading, deleteOrderMutation } = useDeleteOrder();
   const formatDate = (inputDate?: string): string => {
     if (!inputDate) return "25 juin 2023";
     const formattedDate = format(new Date(inputDate), "dd MMMM yyyy", {
@@ -44,10 +46,11 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
             type="delete"
             title="Supprimer ordre de fabrication"
             description="êtes vous sûr de vouloir supprimer l'ordre de fabrication!"
-            handleConfirm={(e) => {
+            handleConfirm={async (e) => {
               e.stopPropagation();
+              await deleteOrderMutation(order.id);
             }}
-            isLoading={false}
+            isLoading={deleteOrderLoading}
             buttonClassName="h-10 w-10 flex items-center justify-center border-primary"
           />
         </div>

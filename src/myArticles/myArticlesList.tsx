@@ -3,8 +3,10 @@ import Stepper from "./Stepper/Stepper";
 import { SearchIcon } from "@/assets/SearchIcon";
 import AddArticle from "./AddArticle/AddArticle";
 import MyArticles from "./ListSteps/myArticles";
+import { useArticlesContext } from "./context/useArticleContext";
 
 const MyArticlesList = () => {
+  const { searchWord, setSearchWord } = useArticlesContext();
   return (
     <div className="h-full space-y-5 p-3">
       <Stepper />
@@ -20,6 +22,8 @@ const MyArticlesList = () => {
                   label=""
                   className="rounded-lg border-[#E6E6E6] bg-[#FAFAFA] py-2 pl-12 pr-4"
                   placeholder="Chercher"
+                  value={searchWord}
+                  onChange={(e) => setSearchWord(e.target.value)}
                 />
               </div>
               <AddArticle />

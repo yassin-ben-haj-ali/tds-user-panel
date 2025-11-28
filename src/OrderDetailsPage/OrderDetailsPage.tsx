@@ -1,37 +1,21 @@
+import useGetOrders from "@/OrdersPage/hooks/useGetOrders";
 import AddItems from "./AddItem/AddItems";
-import ItemsTable from "./ItemsList/itemsList";
 import OrderDetailsPageLayout from "./OrderDetailsPageLayout";
 import ToggleMenuOrder from "./ToggleMenu/ToggleMenuOrder";
+import { useParams } from "react-router-dom";
+import ItemsTable from "./ItemsList/ItemsList";
 
 const OrderDetailsPage = () => {
-  const order = {
-    id: "1",
-    article: {
-      id: "1",
-      numero: "commande-1",
-      date_export: "12-05-2025",
-      status: "En stock",
-      received_qty: 150,
+  const { id } = useParams();
+  const getOrderById = useGetOrders({
+    enabled: !!id,
+    filters: {
+      where: {
+        id: id ?? "",
+      },
     },
-    fabriquant: {
-      id: "2",
-      name: "usine2",
-      mailAdress: "usine2@yopmail.com",
-      adress: "rue d'independance - 4030",
-      telephoneNumber: "+216 50889126",
-      createdAt: "2025-09-15",
-    },
-    technicien: {
-      id: "3",
-      firstName: "admin",
-      lastName: "super",
-      civility: "Mr",
-      mailAdress: "admin@yopmail.com",
-      role: "Administrateur",
-      telephoneNumber: "+216 50889123",
-    },
-    createdAt: "2025-11-21",
-  };
+  });
+  const order = getOrderById.data?.pages?.[0]?.paginatedResult?.[0] ?? null;
   return (
     <div className="flex h-full flex-col">
       <OrderDetailsPageLayout>
@@ -41,7 +25,7 @@ const OrderDetailsPage = () => {
           </div>
           <ItemsTable />
         </div>
-        <ToggleMenuOrder order={order} />
+        {order && <ToggleMenuOrder order={order} />}
       </OrderDetailsPageLayout>
     </div>
   );

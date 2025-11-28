@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import type { Order } from "./types";
+import type { Order, OrderItem } from "./types";
 import { OrdersContext } from "./OrdersContext";
 
 export const useOrdersContext = () => {
@@ -23,10 +23,18 @@ export const useOrdersContext = () => {
     }));
   };
 
+  const setOrderItems = (orderItems: OrderItem[]) => {
+    setState((prev) => ({
+      ...prev,
+      orderItems,
+    }));
+  };
+
   return {
     ...orders,
     setOrders,
     setSearchWord,
     setState,
+    setOrderItems,
   };
 };

@@ -9,6 +9,7 @@ import type { FormValues } from "./AddOrderType";
 import useGetArticles from "@/myArticles/hooks/useGetArticles";
 import useGetUsers from "@/UsersPage/hooks/useGetUsers";
 import useGetManufacturers from "@/ManufacturersPage/hooks/useGetManufacturers";
+import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 
 type Props = {
   register: UseFormRegister<FormValues>;
@@ -18,26 +19,46 @@ type Props = {
 };
 
 const OrderForm: React.FC<Props> = ({ register, errors, watch, setValue }) => {
-  const getArticlesQuery = useGetArticles("STOCK", { enabled: true });
+  const getArticlesQuery = useGetArticles("STOCK", {
+    enabled: true,
+  });
+  const { auth } = useUsersContext();
   const articleOptions =
     getArticlesQuery.data?.pages.flatMap((page) =>
-      page.paginatedResult.map((article) => ({
-        label: article.number, // or article.name or anything you want
-        value: article.id,
-      }))
+      page.paginatedResult
+        .filter((article) => {
+          return (article.order ?? []).length === 0;
+        })
+        .map((article) => ({
+          label: article.number, // or article.name or anything you want
+          value: article.id,
+        }))
     ) ?? [];
+  const getUsersQuery = useGetUsers({
+    filters: auth?.user
+      ? [
+          {
+            filterKey: "id",
+            filterValue: auth.user.id,
+            optionName: "user",
+            customFilter: `where[id][not]=${auth.user.id}`,
+          },
+          {
+            filterKey: "id",
+            filterValue: "TECHNICIEN",
+            optionName: "user",
+            customFilter: `where[role]=TECHNICIEN`,
+          },
+        ]
+      : undefined,
+  });
 
-  const getUsersQuery = useGetUsers({ enabled: true });
   const technicienOptions =
     getUsersQuery.data?.pages.flatMap((page) =>
-      page.paginatedResult
-        .filter((user) => {
-          return user.role === "TECHNICIEN";
-        })
-        .map((user) => ({
-          label: `${user.firstName} ${user.lastName}`,
-          value: user.id,
-        }))
+      page.paginatedResult.map((user) => ({
+        label: `${user.firstName} ${user.lastName}`,
+        value: user.id,
+      }))
     ) ?? [];
   const getFabriquantsQuery = useGetManufacturers({ enabled: true });
   const fabriquantOptions =

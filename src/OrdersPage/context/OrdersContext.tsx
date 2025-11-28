@@ -4,6 +4,7 @@ import type { OrderContextStateType } from "./types";
 export const initialState: OrderContextStateType = {
   orders: [],
   searchWord: "",
+  orderItems: [],
 };
 
 type OrdersContextType = {

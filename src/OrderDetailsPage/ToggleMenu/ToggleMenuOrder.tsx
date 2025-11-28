@@ -1,8 +1,8 @@
 import { useState } from "react";
 import CustomToggle from "./CustomToggle";
 import ManufacturerDetails from "@/ManufacturersPage/ViewManufacturer/ManufacturerDetails";
-import type { Order } from "@/OrdersPage/List/OrderCard";
 import UserDetails from "@/UsersPage/ViewUser/UserDetails";
+import type { Order } from "@/OrdersPage/context/types";
 
 type ToggleMenuOrderProps = {
   order: Order;

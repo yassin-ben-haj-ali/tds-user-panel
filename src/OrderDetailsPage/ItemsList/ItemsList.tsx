@@ -8,6 +8,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import ConfirmModal from "@/layouts/ConfirmModal";
+import { useInView } from "react-intersection-observer";
+import { useOrdersContext } from "@/OrdersPage/context/useOrderContext";
+import useGetOrderItems from "../hooks/useGetOrderItems";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { formatDate } from "@/utils/functions";
+import useDeleteItems from "../hooks/useDeleteItems";
 
 const headers = [
   {
@@ -26,25 +33,39 @@ const headers = [
   },
 ];
 
-const items = [
-  {
-    id: "1",
-    number: 150,
-    createdAt: "2025-10-01",
-  },
-  {
-    id: "2",
-    number: 350,
-    createdAt: "2025-09-15",
-  },
-];
-
 const ItemsTable = () => {
-  const itemsRows = items.map((item, index) => (
+  const { ref, inView } = useInView();
+  const { id } = useParams();
+  const { orderItems } = useOrdersContext();
+  const getOrderItemsQuery = useGetOrderItems({
+    filters: id
+      ? [
+          {
+            filterKey: "id",
+            filterValue: id,
+            optionName: "user",
+            customFilter: `where[order][id]=${id}`,
+          },
+        ]
+      : undefined,
+    enabled: !!id,
+  });
+  const { deleteItemsLoading, deleteItemsMutation } = useDeleteItems();
+  useEffect(() => {
+    if (inView && getOrderItemsQuery.hasNextPage) {
+      getOrderItemsQuery.fetchNextPage();
+    }
+  }, [
+    inView,
+    getOrderItemsQuery.hasNextPage,
+    getOrderItemsQuery.fetchNextPage,
+  ]);
+
+  const itemsRows = orderItems.map((item, index) => (
     <TableRow key={index}>
-      <TableCell className="text-center font-medium">{item.number}</TableCell>
+      <TableCell className="text-center font-medium">{item.quantity}</TableCell>
       <TableCell className="text-center font-medium">
-        {item.createdAt}
+        {formatDate(item.createdAt)}
       </TableCell>
       <TableCell className="text-center">
         <TooltipProvider>
@@ -64,10 +85,11 @@ const ItemsTable = () => {
                   "Êtes-vous sûr de vouloir supprimer la quantité travaillé"
                 }
                 description={""}
-                handleConfirm={(e) => {
+                handleConfirm={async (e) => {
                   e.stopPropagation();
+                  await deleteItemsMutation(item.id);
                 }}
-                isLoading={false}
+                isLoading={deleteItemsLoading}
               />
             </TooltipTrigger>
             <TooltipContent>
@@ -79,16 +101,13 @@ const ItemsTable = () => {
     </TableRow>
   ));
 
-  const isFetchingNextPage = false;
-  const isLoading = false;
-
   return (
     <>
       <CustomTable
         headers={headers}
         data={
           <>
-            {isLoading ? (
+            {getOrderItemsQuery.isLoading ? (
               <TableRow>
                 <TableCell colSpan={headers.length + 1} className="min-h-full">
                   <Loader className="flex h-full w-full items-center justify-center" />
@@ -97,9 +116,9 @@ const ItemsTable = () => {
             ) : (
               <>
                 {itemsRows}
-                <TableRow>
+                <TableRow ref={ref}>
                   <TableCell colSpan={headers.length + 1} className="h-full">
-                    {isFetchingNextPage && (
+                    {getOrderItemsQuery.isFetchingNextPage && (
                       <Loader className="flex w-full items-center justify-center" />
                     )}
                   </TableCell>
@@ -108,8 +127,11 @@ const ItemsTable = () => {
             )}
           </>
         }
-        filterType="users"
-        hasData={true}
+        filterType="items"
+        hasData={
+          getOrderItemsQuery.isLoading ||
+          getOrderItemsQuery?.data?.pages[0]?.totalCount !== 0
+        }
       />
     </>
   );

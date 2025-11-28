@@ -70,7 +70,7 @@ const CustomInput = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           {props.error && (
             <div>
-              <p className="absolute left-2 top-3/4 block overflow-hidden text-ellipsis whitespace-normal bg-inputBackground px-1 text-xs font-normal text-red-600">
+              <p className="absolute left-2  block overflow-hidden text-ellipsis whitespace-normal bg-inputBackground px-1 text-xs font-normal text-red-600">
                 {" "}
                 {props.error}{" "}
               </p>

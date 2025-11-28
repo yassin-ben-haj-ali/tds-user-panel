@@ -1,12 +1,14 @@
 import { CustomInput } from "@/components/ui/CustomInput";
 import { SearchIcon } from "@/assets/SearchIcon";
 import AddUser from "./AddUser/AddUser";
+import { useUsersContext } from "./context/useUsersContext";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const UsersPageLayout = (props: Props) => {
+  const { searchWord, setSearchWord } = useUsersContext();
   return (
     <div className="h-full space-y-7">
       <div className="w-full space-y-3">
@@ -26,6 +28,8 @@ const UsersPageLayout = (props: Props) => {
             label=""
             className="rounded-lg border-[#E6E6E6] bg-[#FAFAFA] py-2 pl-12 pr-4"
             placeholder={"Rechercher"}
+            value={searchWord}
+            onChange={(e) => setSearchWord(e.target.value)}
           />
         </div>
         <AddUser />

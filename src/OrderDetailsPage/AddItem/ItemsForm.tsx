@@ -1,7 +1,13 @@
 import { CustomInput } from "@/components/ui/CustomInput";
 import { CustomDatePicker } from "@/components/ui/CustomDatePicker";
 import { today, getLocalTimeZone } from "@internationalized/date";
-const ItemsForm = () => {
+
+type ItemsFormProps = {
+  setQuantity: (quantity: number | null) => void;
+  quantity: number | null;
+};
+
+const ItemsForm: React.FC<ItemsFormProps> = ({ setQuantity, quantity }) => {
   return (
     <>
       <div className="space-y-3">
@@ -10,6 +16,9 @@ const ItemsForm = () => {
           label="Quantité"
           placeholder="Quantité"
           type="number"
+          error={!quantity ? "quantity is required" : undefined}
+          value={quantity ?? 0}
+          onChange={(e) => setQuantity(Number(e.target.value))}
         />
         <CustomDatePicker
           id="date"

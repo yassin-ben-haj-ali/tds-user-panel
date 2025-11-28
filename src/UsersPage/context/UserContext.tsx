@@ -6,6 +6,7 @@ export const initialState: UsersContextStateType = {
     users: [],
     articles: [],
     manufacturers: [],
+    items: [],
   },
   auth: null,
   userList: [],

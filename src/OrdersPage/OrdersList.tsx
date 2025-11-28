@@ -2,8 +2,10 @@ import { CustomInput } from "@/components/ui/CustomInput";
 import { SearchIcon } from "@/assets/SearchIcon";
 import AddOrder from "./AddOrder/AddOrder";
 import Orders from "./List/Orders";
+import { useOrdersContext } from "./context/useOrderContext";
 
 const OrdersList = () => {
+  const { searchWord, setSearchWord } = useOrdersContext();
   return (
     <div className="h-[75%] space-y-5">
       <div className="h-4/5 w-full rounded border-2 border-x-2 border-dashed border-[#dee2e6] px-5 py-6">
@@ -17,6 +19,8 @@ const OrdersList = () => {
                 label=""
                 className="rounded-lg border-[#E6E6E6] bg-[#FAFAFA] py-2 pl-12 pr-4"
                 placeholder="Chercher"
+                value={searchWord}
+                onChange={(e) => setSearchWord(e.target.value)}
               />
             </div>
             <AddOrder />

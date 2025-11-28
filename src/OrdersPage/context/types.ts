@@ -12,7 +12,15 @@ export type Order = {
   technicienId: string;
 };
 
+export type OrderItem = {
+  id: string;
+  quantity: number;
+  createdAt: string;
+  order: Order;
+};
+
 export type OrderContextStateType = {
   orders: Order[];
+  orderItems: OrderItem[];
   searchWord: string;
 };

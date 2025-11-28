@@ -9,6 +9,7 @@ import { type ReactElement, useState } from "react";
 import { X } from "lucide-react";
 import Loader from "@/components/ui/Loader/Loader";
 import ManufacturerDetails from "./ManufacturerDetails";
+import type { Manufacturer } from "../context/types";
 
 type Props = {
   id?: string;

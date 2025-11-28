@@ -10,6 +10,8 @@ import OrdersPage from "./OrdersPage/OrdersPage";
 import OrderDetailsPage from "./OrderDetailsPage/OrderDetailsPage";
 import RequireAuth from "./RequireAuth";
 import PersistLogin from "./PersistLogin";
+import VerifyEmailPage from "./LoginPage/VerifyEmailPage";
+import ResetPasswordPage from "./LoginPage/ResetPasswordPage";
 
 const AppRoutes = () => {
   return (
@@ -23,6 +25,22 @@ const AppRoutes = () => {
             </LoginLayout>
           }
         ></Route>
+        <Route
+          path="auth/verify-email"
+          element={
+            <LoginLayout>
+              <VerifyEmailPage />
+            </LoginLayout>
+          }
+        />
+        <Route
+          path="auth/reset-password"
+          element={
+            <LoginLayout>
+              <ResetPasswordPage />
+            </LoginLayout>
+          }
+        />
       </Route>
       <Route element={<PersistLogin />}>
         <Route path="/" element={<Layout />}>

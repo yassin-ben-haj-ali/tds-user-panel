@@ -16,10 +16,10 @@ const Orders = () => {
       id: "1",
       article: {
         id: "1",
-        numero: "commande-1",
-        date_export: "12-05-2025",
+        number: "commande-1",
+        exportedAt: "12-05-2025",
         status: "En stock",
-        received_qty: 150,
+        quantity: 150,
       },
       fabriquant: {
         id: "2",

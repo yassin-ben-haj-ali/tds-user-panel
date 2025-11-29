@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosInstance } from "axios";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import ToastMessage from "@/ToastMessage";
 
 type ManufacturerEditType = {
   name?: string;
@@ -32,8 +33,18 @@ const useEditManufacturer = () => {
     mutationFn: ({ data, id }: { data: ManufacturerEditType; id: string }) =>
       editManufacturer(data, id, axiosPrivate),
     onSuccess: () => {
+      ToastMessage({
+        type: "success",
+        message: "Fabriquant mis à jour !",
+      });
       queryClient.invalidateQueries({
         queryKey: ["manufacturers"],
+      });
+    },
+    onError: () => {
+      ToastMessage({
+        type: "error",
+        message: "Une erreur est survenue lors de la mise à jour.",
       });
     },
   });

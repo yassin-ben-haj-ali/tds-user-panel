@@ -1,4 +1,5 @@
 import axios from "@/api/axios";
+import ToastMessage from "@/ToastMessage";
 import type { User } from "@/UsersPage/context/types";
 import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 import { useMutation } from "@tanstack/react-query";
@@ -26,6 +27,7 @@ const useLogin = () => {
   const { mutateAsync: loginMutation, isPending } = useMutation({
     mutationFn: login,
     onSuccess: (data) => {
+      ToastMessage({ type: "success", message: "Connexion réussie !" });
       const { user, token } = data;
       localStorage.setItem("access-token", data.token);
       setUser({
@@ -33,6 +35,12 @@ const useLogin = () => {
         user,
       });
       navigate("/");
+    },
+    onError: () => {
+      ToastMessage({
+        type: "error",
+        message: "Une erreur est survenue, veuillez réessayer.",
+      });
     },
   });
 

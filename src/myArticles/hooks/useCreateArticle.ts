@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { FormValues } from "../AddArticle/AddArticleType";
 import type { AxiosInstance } from "axios";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import ToastMessage from "@/ToastMessage";
 
 const createArticle = async (
   credentials: FormValues,
@@ -20,8 +21,15 @@ const useCreateArticle = () => {
   } = useMutation({
     mutationFn: (data: FormValues) => createArticle(data, axiosPrivate),
     onSuccess: () => {
+      ToastMessage({ type: "success", message: "Commande créé !" });
       queryClient.invalidateQueries({
         queryKey: ["articles"],
+      });
+    },
+    onError: () => {
+      ToastMessage({
+        type: "error",
+        message: "Erreur lors de la création de commande.",
       });
     },
   });

@@ -1,4 +1,5 @@
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import ToastMessage from "@/ToastMessage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosInstance } from "axios";
 
@@ -16,8 +17,15 @@ const useDeleteManufacturer = () => {
   } = useMutation({
     mutationFn: async (id: string) => deleteManufacturer(axiosPrivate, id),
     onSuccess: () => {
+      ToastMessage({ type: "success", message: "Fabriquant supprimé !" });
       queryClient.invalidateQueries({
         queryKey: ["manufacturers"],
+      });
+    },
+    onError: () => {
+      ToastMessage({
+        type: "error",
+        message: "Erreur lors de la suppression de fabriquant.",
       });
     },
   });

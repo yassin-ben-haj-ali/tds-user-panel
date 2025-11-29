@@ -1,4 +1,5 @@
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import ToastMessage from "@/ToastMessage";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosInstance } from "axios";
 
@@ -16,8 +17,18 @@ const useDeleteItems = () => {
   } = useMutation({
     mutationFn: async (id: string) => deleteItems(axiosPrivate, id),
     onSuccess: () => {
+      ToastMessage({ type: "success", message: "liste supprimé !" });
       queryClient.invalidateQueries({
         queryKey: ["items"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["order"],
+      });
+    },
+    onError: () => {
+      ToastMessage({
+        type: "error",
+        message: "Erreur lors de la suppression de liste.",
       });
     },
   });

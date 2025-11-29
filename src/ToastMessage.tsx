@@ -12,7 +12,7 @@ type ToastProps = {
 
 const ToastMessage: React.FC<ToastProps> = ({ type, message }) => {
   const toastType = type === "success" ? toast.success : toast.error;
-  const backgroundColor = type === "success" ? "#4D2EB2" : "#C72C41";
+  const backgroundColor = type === "success" ? "#111b41" : "#C72C41";
   toastType(<CustomToast message={message} type={type} />, {
     className: css({
       background: `${backgroundColor} !important`,

@@ -17,14 +17,17 @@ const useDeleteArticle = () => {
   } = useMutation({
     mutationFn: async (id: string) => deleteArticle(axiosPrivate, id),
     onSuccess: () => {
-        ToastMessage({ type: "success", message: "commande supprimé !" });
-        queryClient.invalidateQueries({
-          queryKey: ["articles"],
-        });
-      },
-      onError: () => {
-        ToastMessage({ type: "error", message:"Erreur lors de la suppression de commande." });
-      },
+      ToastMessage({ type: "success", message: "commande supprimé !" });
+      queryClient.invalidateQueries({
+        queryKey: ["articles"],
+      });
+    },
+    onError: () => {
+      ToastMessage({
+        type: "error",
+        message: "Erreur lors de la suppression de commande.",
+      });
+    },
   });
   return {
     deleteArticleMutation,

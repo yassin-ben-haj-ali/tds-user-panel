@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Loader = (props: Props) => {
-	const { className, width = "43", height = "44", fillColor = "#4D2EB2" } = props;
+	const { className, width = "43", height = "44", fillColor = "#111b41" } = props;
 
 	return (
 		<div className={cn(className)} style={{ width, height }}>

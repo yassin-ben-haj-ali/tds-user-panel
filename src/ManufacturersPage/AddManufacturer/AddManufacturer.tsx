@@ -17,6 +17,7 @@ import { addManufacturerSchema, type FormValues } from "./AddManufacturerType";
 import EditIcon from "@/assets/EditIcon";
 import usecreateManufacturers from "../hooks/useCreateManufacturers";
 import type { Manufacturer } from "../context/types";
+import useEditManufacturer from "../hooks/useEditManufacturer";
 
 type AddManufacturerProps = {
   editMode?: boolean;
@@ -36,9 +37,15 @@ const AddManufacturer: React.FC<AddManufacturerProps> = ({
 
   const { createManufacturersMutation, createManufacturersLoading } =
     usecreateManufacturers();
+  const { editManufacturerMutation, editManufacturersLoading } =
+    useEditManufacturer();
 
   const onSubmit = async (data: FormValues) => {
-    await createManufacturersMutation(data);
+    if (editMode && manufacturer) {
+      await editManufacturerMutation({ data, id: manufacturer.id });
+    } else {
+      await createManufacturersMutation(data);
+    }
     setOpen(false);
   };
   useEffect(() => {
@@ -99,7 +106,7 @@ const AddManufacturer: React.FC<AddManufacturerProps> = ({
           />
           <DialogFooter className="flex items-center justify-center!">
             <Button className="w-4/5" type="submit">
-              {createManufacturersLoading ? (
+              {createManufacturersLoading || editManufacturersLoading ? (
                 <Loader fillColor="#FFFFFF" width="25" height="25" />
               ) : editMode ? (
                 "Modifier"

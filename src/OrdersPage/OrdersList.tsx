@@ -3,9 +3,17 @@ import { SearchIcon } from "@/assets/SearchIcon";
 import AddOrder from "./AddOrder/AddOrder";
 import Orders from "./List/Orders";
 import { useOrdersContext } from "./context/useOrderContext";
+import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 
 const OrdersList = () => {
   const { searchWord, setSearchWord } = useOrdersContext();
+  const { auth } = useUsersContext();
+  const userRole = auth?.user.role;
+
+  const isTechnicien = !["ADMIN", "GESTIONNAIRE"].includes(
+    userRole ?? "TECHNICIEN"
+  );
+
   return (
     <div className="h-[75%] space-y-5">
       <div className="h-4/5 w-full rounded border-2 border-x-2 border-dashed border-[#dee2e6] px-5 py-6">
@@ -23,7 +31,7 @@ const OrdersList = () => {
                 onChange={(e) => setSearchWord(e.target.value)}
               />
             </div>
-            <AddOrder />
+            {!isTechnicien && <AddOrder />}
           </div>
           <Orders />
         </div>

@@ -13,6 +13,7 @@ import ViewIcon from "@/assets/ViewIcon";
 import { useNavigate } from "react-router-dom";
 import type { Order } from "../context/types";
 import useDeleteOrder from "../hooks/useDeleteOrder";
+import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 
 type OrderCardProps = {
   order: Order;
@@ -20,6 +21,12 @@ type OrderCardProps = {
 
 const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
   const navigate = useNavigate();
+  const { auth } = useUsersContext();
+  const userRole = auth?.user.role;
+
+  const isTechnicien = !["ADMIN", "GESTIONNAIRE"].includes(
+    userRole ?? "TECHNICIEN"
+  );
   const { deleteOrderLoading, deleteOrderMutation } = useDeleteOrder();
   const formatDate = (inputDate?: string): string => {
     if (!inputDate) return "25 juin 2023";
@@ -42,17 +49,19 @@ const OrderCard: React.FC<OrderCardProps> = ({ order }) => {
           >
             <ViewIcon />
           </button>
-          <ConfirmModal
-            type="delete"
-            title="Supprimer ordre de fabrication"
-            description="êtes vous sûr de vouloir supprimer l'ordre de fabrication!"
-            handleConfirm={async (e) => {
-              e.stopPropagation();
-              await deleteOrderMutation(order.id);
-            }}
-            isLoading={deleteOrderLoading}
-            buttonClassName="h-10 w-10 flex items-center justify-center border-primary"
-          />
+          {!isTechnicien && (
+            <ConfirmModal
+              type="delete"
+              title="Supprimer ordre de fabrication"
+              description="êtes vous sûr de vouloir supprimer l'ordre de fabrication!"
+              handleConfirm={async (e) => {
+                e.stopPropagation();
+                await deleteOrderMutation(order.id);
+              }}
+              isLoading={deleteOrderLoading}
+              buttonClassName="h-10 w-10 flex items-center justify-center border-primary"
+            />
+          )}
         </div>
       </CardHeader>
       <CardDescription className="font-medium text-primary text-lg px-6 space-y-3">

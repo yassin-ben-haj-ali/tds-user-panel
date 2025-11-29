@@ -7,21 +7,36 @@ import { useInView } from "react-intersection-observer";
 import useGetOrders from "../hooks/useGetOrders";
 import type { Order } from "../context/types";
 import AddOrder from "../AddOrder/AddOrder";
+import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 
 const Orders = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { ref, inView } = useInView({
     threshold: 0,
   });
+  const { auth } = useUsersContext();
+  const userRole = auth?.user.role;
+  const userId = auth?.user.id ?? "";
 
-  const getOrdersQuery = useGetOrders({
-    filters: {
-      orderBy: {
-        key: "createdAt",
-        value: "desc",
-      },
+  const isTechnicien = !["ADMIN", "GESTIONNAIRE"].includes(
+    userRole ?? "TECHNICIEN"
+  );
+
+const getOrdersQuery = useGetOrders({
+  filters: {
+    ...(isTechnicien
+      ? {
+          where: {
+            technicienId: userId,
+          },
+        }
+      : {}),
+    orderBy: {
+      key: "createdAt",
+      value: "desc",
     },
-  });
+  },
+});
   const statusFetch = getOrdersQuery?.status;
 
   useEffect(() => {

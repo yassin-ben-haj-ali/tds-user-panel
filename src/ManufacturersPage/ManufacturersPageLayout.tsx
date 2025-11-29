@@ -2,6 +2,7 @@ import { CustomInput } from "@/components/ui/CustomInput";
 import { SearchIcon } from "@/assets/SearchIcon";
 import AddManufacturer from "./AddManufacturer/AddManufacturer";
 import { useManufacturersContext } from "./context/useManufacturersContext";
+import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 
 type Props = {
   children: React.ReactNode;
@@ -9,6 +10,8 @@ type Props = {
 
 const ManufacturersPageLayout = (props: Props) => {
   const { searchWord, setSearchWord } = useManufacturersContext();
+  const { auth } = useUsersContext();
+  const userRole = auth?.user.role;
   return (
     <div className="h-full space-y-7">
       <div className="w-full space-y-3">
@@ -32,7 +35,9 @@ const ManufacturersPageLayout = (props: Props) => {
             onChange={(e) => setSearchWord(e.target.value)}
           />
         </div>
-        <AddManufacturer />
+        {["ADMIN", "GESTIONNAIRE"].includes(userRole ?? "TECHNICIEN") && (
+          <AddManufacturer />
+        )}
       </div>
       <div className="h-full" style={{ minHeight: "260px" }}>
         {props.children}

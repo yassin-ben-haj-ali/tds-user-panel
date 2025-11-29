@@ -58,6 +58,7 @@ const headers = [
 const UsersTable = () => {
   const { ref, inView } = useInView();
   const { userList, auth } = useUsersContext();
+  const userRole = auth?.user.role;
   const getUsersQuery = useGetUsers({
     filters: auth?.user
       ? [
@@ -93,37 +94,39 @@ const UsersTable = () => {
       <TableCell className="text-center">
         {formatDate(user.createdAt)}
       </TableCell>
-      <TableCell className="text-center flex items-center justify-center gap-3">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button tabIndex={0}>
-                <AddUser editMode user={user} />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Modifier</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger type="button">
-              <ConfirmModal
-                type="delete"
-                title={"Êtes-vous sûr de vouloir supprimer l'utilisateur"}
-                description={""}
-                handleConfirm={async (e) => {
-                  e.stopPropagation();
-                  await deleteUserMutation(user.id);
-                }}
-                isLoading={deleteUserLoading}
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>supprimer</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </TableCell>
+      {userRole === "ADMIN" && (
+        <TableCell className="text-center flex items-center justify-center gap-3">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button tabIndex={0}>
+                  <AddUser editMode user={user} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Modifier</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger type="button">
+                <ConfirmModal
+                  type="delete"
+                  title={"Êtes-vous sûr de vouloir supprimer l'utilisateur"}
+                  description={""}
+                  handleConfirm={async (e) => {
+                    e.stopPropagation();
+                    await deleteUserMutation(user.id);
+                  }}
+                  isLoading={deleteUserLoading}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>supprimer</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </TableCell>
+      )}
     </TableRow>
   ));
 
@@ -158,6 +161,7 @@ const UsersTable = () => {
           getUsersQuery.isLoading ||
           getUsersQuery?.data?.pages[0]?.totalCount !== 0
         }
+        hideActions={userRole!="ADMIN"}
       />
     </>
   );

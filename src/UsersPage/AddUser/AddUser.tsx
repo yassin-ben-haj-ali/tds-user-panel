@@ -17,6 +17,7 @@ import { addUserSchema, type FormValues } from "./AddUserType";
 import EditIcon from "@/assets/EditIcon";
 import type { User } from "../context/types";
 import useCreateUser from "../hooks/useCreateUser";
+import useEditUser from "../hooks/useEditUser";
 
 type AddUserProps = {
   editMode?: boolean;
@@ -32,20 +33,30 @@ const AddUser: React.FC<AddUserProps> = ({ editMode, user }) => {
   const { errors } = formState;
 
   const { createUserLoading, createUserMutation } = useCreateUser();
+  const { editUserLoading, editUserMutation } = useEditUser();
 
   const onSubmit = async (data: FormValues) => {
-    await createUserMutation(data);
+    if (editMode && user) {
+      await editUserMutation({ data, id: user.id });
+    } else {
+      await createUserMutation(data);
+    }
     setOpen(false);
   };
   useEffect(() => {
     if (open) {
       if (editMode && user) {
         reset(user);
+        if (user.countryCode) {
+          setValue("countryCode", user.countryCode);
+        } else {
+          setValue("countryCode", "TN");
+        }
       } else {
         reset();
       }
     }
-  }, [open, reset]);
+  }, [open, reset, user,setValue]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -95,7 +106,7 @@ const AddUser: React.FC<AddUserProps> = ({ editMode, user }) => {
           />
           <DialogFooter className="flex items-center justify-center!">
             <Button className="w-4/5" type="submit">
-              {createUserLoading ? (
+              {createUserLoading || editUserLoading ? (
                 <Loader fillColor="#FFFFFF" width="25" height="25" />
               ) : editMode ? (
                 "Modifier"

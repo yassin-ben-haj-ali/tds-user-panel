@@ -7,6 +7,7 @@ import type {
 } from "react-hook-form";
 import type { FormValues } from "./AddArticleType";
 import { CustomDatePicker } from "@/components/ui/CustomDatePicker";
+import { CalendarDate } from "@internationalized/date";
 
 type Props = {
   register: UseFormRegister<FormValues>;
@@ -15,7 +16,15 @@ type Props = {
   watch: UseFormWatch<FormValues>;
 };
 
-const ArticleForm = ({ register, errors, setValue }: Props) => {
+function dateToDateValue(date: Date) {
+  return new CalendarDate(
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate()
+  );
+}
+
+const ArticleForm = ({ register, errors, setValue, watch }: Props) => {
   return (
     <>
       <div className="space-y-3">
@@ -39,6 +48,9 @@ const ArticleForm = ({ register, errors, setValue }: Props) => {
           label="date d'export"
           className="pointer-events-auto flex w-full items-center justify-center rounded-md border border-[#E6E6E6] bg-[#FAFAFA] text-[#4c4c4c] hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary"
           required={true}
+          value={
+            watch("exportedAt") ? dateToDateValue(watch("exportedAt")) : null
+          }
           error={errors.exportedAt?.message}
           onChange={(dateValue) => {
             if (dateValue) {

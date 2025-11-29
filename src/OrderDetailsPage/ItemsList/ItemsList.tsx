@@ -15,6 +15,11 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { formatDate } from "@/utils/functions";
 import useDeleteItems from "../hooks/useDeleteItems";
+import { useUsersContext } from "@/UsersPage/context/useUsersContext";
+
+type ItemsTableProps = {
+  quantityRequested: number;
+};
 
 const headers = [
   {
@@ -33,10 +38,16 @@ const headers = [
   },
 ];
 
-const ItemsTable = () => {
+const ItemsTable: React.FC<ItemsTableProps> = ({ quantityRequested }) => {
   const { ref, inView } = useInView();
   const { id } = useParams();
   const { orderItems } = useOrdersContext();
+  const { auth } = useUsersContext();
+  const userRole = auth?.user.role;
+
+  const isTechnicien = !["ADMIN", "GESTIONNAIRE"].includes(
+    userRole ?? "TECHNICIEN"
+  );
   const getOrderItemsQuery = useGetOrderItems({
     filters: id
       ? [
@@ -61,6 +72,13 @@ const ItemsTable = () => {
     getOrderItemsQuery.fetchNextPage,
   ]);
 
+  const totalWorkedQuantity = orderItems?.reduce(
+    (sum, item) => sum + (item.quantity ?? 0),
+    0
+  );
+
+  const canEditOrDelete = isTechnicien && totalWorkedQuantity < quantityRequested;
+
   const itemsRows = orderItems.map((item, index) => (
     <TableRow key={index}>
       <TableCell className="text-center font-medium">{item.quantity}</TableCell>
@@ -68,35 +86,29 @@ const ItemsTable = () => {
         {formatDate(item.createdAt)}
       </TableCell>
       <TableCell className="text-center">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button tabIndex={0}></button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Modifier</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger type="button">
-              <ConfirmModal
-                type="delete"
-                title={
-                  "Êtes-vous sûr de vouloir supprimer la quantité travaillé"
-                }
-                description={""}
-                handleConfirm={async (e) => {
-                  e.stopPropagation();
-                  await deleteItemsMutation(item.id);
-                }}
-                isLoading={deleteItemsLoading}
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>supprimer</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        {canEditOrDelete && (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger type="button">
+                <ConfirmModal
+                  type="delete"
+                  title={
+                    "Êtes-vous sûr de vouloir supprimer la quantité travaillé"
+                  }
+                  description={""}
+                  handleConfirm={async (e) => {
+                    e.stopPropagation();
+                    await deleteItemsMutation(item.id);
+                  }}
+                  isLoading={deleteItemsLoading}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>supprimer</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
       </TableCell>
     </TableRow>
   ));
@@ -132,6 +144,7 @@ const ItemsTable = () => {
           getOrderItemsQuery.isLoading ||
           getOrderItemsQuery?.data?.pages[0]?.totalCount !== 0
         }
+        hideActions={!canEditOrDelete}
       />
     </>
   );

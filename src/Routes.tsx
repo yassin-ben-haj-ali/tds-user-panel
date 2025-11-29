@@ -44,7 +44,7 @@ const AppRoutes = () => {
       />
       <Route element={<PersistLogin />}>
         <Route path="/" element={<Layout />}>
-          <Route index element={<Navigate to="/home" replace />} />
+          <Route index element={<Navigate to="/commands" replace />} />
           <Route element={<RequireAuth />}>
             <Route path="/home" element={<UsersPage />} />
             <Route path="/commands" element={<MyArticlesPage />} />

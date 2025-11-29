@@ -2,13 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosInstance } from "axios";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 
-type orderItemsCredentialsType={
-   quantity:number;
-   orderId:string
-}
+type orderItemsCredentialsType = {
+  quantity: number;
+  orderId: string;
+};
 
 const createOrderItems = async (
-  credentials:orderItemsCredentialsType,
+  credentials: orderItemsCredentialsType,
   axiosPrivate: AxiosInstance
 ) => {
   const response = await axiosPrivate.post("/items/", credentials);
@@ -22,10 +22,14 @@ const useCreateOrderItems = () => {
     mutateAsync: createOrderItemsMutation,
     isPending: createOrderItemsLoading,
   } = useMutation({
-    mutationFn: (data: orderItemsCredentialsType) => createOrderItems(data, axiosPrivate),
+    mutationFn: (data: orderItemsCredentialsType) =>
+      createOrderItems(data, axiosPrivate),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ["items"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["order"],
       });
     },
   });

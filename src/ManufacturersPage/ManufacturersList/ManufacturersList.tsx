@@ -17,6 +17,7 @@ import { useInView } from "react-intersection-observer";
 import { useManufacturersContext } from "../context/useManufacturersContext";
 import { formatDate } from "@/utils/functions";
 import useDeleteManufacturer from "../hooks/useDeleteManufacturer";
+import { useUsersContext } from "@/UsersPage/context/useUsersContext";
 
 const headers = [
   {
@@ -59,7 +60,21 @@ const headers = [
 const ManufacturersTable = () => {
   const { ref, inView } = useInView();
   const { manufacturers } = useManufacturersContext();
-  const getManufacturersQuery = useGetManufacturers();
+  const { auth } = useUsersContext();
+  const userRole = auth?.user.role;
+  const userId = auth?.user.id ?? "";
+  const getManufacturersQuery = useGetManufacturers({
+    filters: !["ADMIN", "GESTIONNAIRE"].includes(userRole ?? "TECHNICIEN")
+      ? [
+          {
+            optionName: "",
+            filterKey: userId,
+            filterValue: "",
+            customFilter: `where[order][some][technicienId]=${userId}`,
+          },
+        ]
+      : undefined,
+  });
   const { deleteManufacturerMutation, deleteManufacturerLoading } =
     useDeleteManufacturer();
 
@@ -72,6 +87,7 @@ const ManufacturersTable = () => {
     getManufacturersQuery.hasNextPage,
     getManufacturersQuery.fetchNextPage,
   ]);
+
   const manufacturersRows = manufacturers.map((manufacturer, index) => (
     <TableRow key={index}>
       <TableCell className="text-center font-medium">
@@ -91,37 +107,39 @@ const ManufacturersTable = () => {
       <TableCell className="text-center">
         {formatDate(manufacturer.createdAt)}
       </TableCell>
-      <TableCell className="text-center">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button tabIndex={0}>
-                <AddManufacturer editMode manufacturer={manufacturer} />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Modifier</p>
-            </TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger type="button">
-              <ConfirmModal
-                type="delete"
-                title={"Êtes-vous sûr de vouloir supprimer le fabriquant"}
-                description={""}
-                handleConfirm={async (e) => {
-                  e.stopPropagation();
-                  await deleteManufacturerMutation(manufacturer.id);
-                }}
-                isLoading={deleteManufacturerLoading}
-              />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>supprimer</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </TableCell>
+      {["ADMIN", "GESTIONNAIRE"].includes(userRole ?? "TECHNICIEN") && (
+        <TableCell className="text-center">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button tabIndex={0}>
+                  <AddManufacturer editMode manufacturer={manufacturer} />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Modifier</p>
+              </TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger type="button">
+                <ConfirmModal
+                  type="delete"
+                  title={"Êtes-vous sûr de vouloir supprimer le fabriquant"}
+                  description={""}
+                  handleConfirm={async (e) => {
+                    e.stopPropagation();
+                    await deleteManufacturerMutation(manufacturer.id);
+                  }}
+                  isLoading={deleteManufacturerLoading}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>supprimer</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </TableCell>
+      )}
     </TableRow>
   ));
   return (
@@ -154,6 +172,9 @@ const ManufacturersTable = () => {
         hasData={
           getManufacturersQuery.isLoading ||
           getManufacturersQuery?.data?.pages[0]?.totalCount !== 0
+        }
+        hideActions={
+          !["ADMIN", "GESTIONNAIRE"].includes(userRole ?? "TECHNICIEN")
         }
       />
     </>

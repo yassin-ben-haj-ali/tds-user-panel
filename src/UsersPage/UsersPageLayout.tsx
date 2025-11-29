@@ -8,7 +8,8 @@ type Props = {
 };
 
 const UsersPageLayout = (props: Props) => {
-  const { searchWord, setSearchWord } = useUsersContext();
+  const { searchWord, setSearchWord, auth } = useUsersContext();
+  const userRole = auth?.user.role;
   return (
     <div className="h-full space-y-7">
       <div className="w-full space-y-3">
@@ -32,7 +33,7 @@ const UsersPageLayout = (props: Props) => {
             onChange={(e) => setSearchWord(e.target.value)}
           />
         </div>
-        <AddUser />
+        {userRole === "ADMIN" && <AddUser />}
       </div>
       <div className="h-full" style={{ minHeight: "260px" }}>
         {props.children}

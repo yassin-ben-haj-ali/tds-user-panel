@@ -17,6 +17,7 @@ import { addArticleSchema, type FormValues } from "./AddArticleType";
 import EditIcon from "@/assets/EditIcon";
 import type { Article } from "../context/types";
 import useCreateArticle from "../hooks/useCreateArticle";
+import useEditArticle from "../hooks/useEditArticle";
 
 type AddArticleProps = {
   editMode?: boolean;
@@ -32,9 +33,14 @@ const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
   const { handleSubmit, register, reset, formState, setValue, watch } = form;
   const { errors } = formState;
   const { createArticleMutation, createArticleLoading } = useCreateArticle();
+  const { editArticleMutation, editArticleLoading } = useEditArticle();
 
   const onSubmit = async (data: FormValues) => {
-    await createArticleMutation(data);
+    if (editMode && article) {
+      await editArticleMutation({ data, id: article.id });
+    } else {
+      await createArticleMutation(data);
+    }
     setOpen(false);
   };
   useEffect(() => {
@@ -54,7 +60,10 @@ const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         {editMode ? (
-          <button className="rounded-md border p-1" type="button">
+          <button
+            className="rounded-md border p-1 h-10 w-10 flex items-center justify-center border-primary"
+            type="button"
+          >
             <EditIcon />
           </button>
         ) : (
@@ -100,7 +109,7 @@ const AddArticle: React.FC<AddArticleProps> = ({ editMode, article }) => {
           />
           <DialogFooter className="flex items-center justify-center!">
             <Button className="w-4/5" type="submit">
-              {createArticleLoading ? (
+              {createArticleLoading || editArticleLoading ? (
                 <Loader fillColor="#FFFFFF" width="25" height="25" />
               ) : editMode ? (
                 "Modifier"

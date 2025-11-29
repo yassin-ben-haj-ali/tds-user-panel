@@ -16,7 +16,7 @@ const Step = (props: Props) => {
   useEffect(() => {
     const urlStatus = searchParams.get("status");
     if (!urlStatus) {
-      setSearchParams({ status: "tous" });
+      setSearchParams({ status: "stock" });
     } else if (urlStatus === props.stepStatus) {
       setFormStep(props.stepNumber as 1 | 2 | 3 | 4);
     }

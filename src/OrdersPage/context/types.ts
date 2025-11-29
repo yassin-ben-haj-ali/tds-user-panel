@@ -10,6 +10,7 @@ export type Order = {
   articleId: string;
   technicien?: User;
   technicienId: string;
+  orderItems?:OrderItem[]
 };
 
 export type OrderItem = {
